@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ftea',
 ]
 
 MIDDLEWARE = [
@@ -75,8 +76,11 @@ WSGI_APPLICATION = 'public_python.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': 'p1288_4tea', ## nazwa bazy danych
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'USER': 'p1288_4tea',
+        'PASSWORD': 'CSmXiSKlCcUd2RxvLJeh',
+        'HOST': 'pgsql29.mydevil.net'
     }
 }
 
@@ -118,3 +122,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'ftea', 'static') 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'ftea', 'media')
