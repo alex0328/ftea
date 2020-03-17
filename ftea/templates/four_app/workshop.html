@@ -1,0 +1,19 @@
+              <div class="menu-items">
+                <ul>
+                    <li><a id="home-color" class="home internalLink" href="{% url 'ftea:index' %}">Home</a></li>
+                    <li><a id="about-me-color" class="about-me" href="{% url 'ftea:index' %}">Welcome</a></a></a></li>
+                    <li><a id="cooperation-color" class="cooperation" href="#">Cooperation</a></li>
+                    <li><a id="my-jobs-color" class="my-jobs" href="#my-work">My jobs</a></li>
+                    <li><a id="contact-color" class="contact internalLink" href="#contact">Contact</a></li>
+                    {% if user.is_authenticated %}
+                    <li><a id="contact-color" class="loglog internalLink ffirst_button2" href="{% url 'ftea:index' %}">Logout: {{ request.user }}</a></li>
+                    {% else %}
+                    <li><a id="contact-color" class="loglog internalLink ffirst_button2" href="{% url 'ftea:index' %}">Login</a></li>
+                    {% endif %}
+                </ul>
+              </div>
+
+
+<!-- header -->
+
+

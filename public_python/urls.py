@@ -1,4 +1,4 @@
-"""public_python URL Configuration
+"""fourfirst_project URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/3.0/topics/http/urls/
@@ -14,8 +14,16 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('', include('ftea.urls', namespace='ftea')),
+    path('login/',
+         auth_views.LoginView.as_view(template_name='ftea/login.html'),
+         name='login'),
+    path('logout/',
+         auth_views.LogoutView.as_view(template_name='ftea/logout.html'),
+         name='logout'),
 ]

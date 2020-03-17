@@ -1,0 +1,39 @@
+                 {% extends 'ftea/base.html' %}
+{% load static %}
+{% block content %}
+
+    <div class="container" style="margin-top:100px">
+<form class="form-style-3" method="post" id="form">
+    {% csrf_token %}
+    <input id="pol" type="text" name="Word_pol" placeholder="word in Polish" value="{{ pol_word }}">
+    <input id="eng" type="text" name="Word_eng" placeholder="word in English" value="{{ eng_word }}">
+    {% if user.is_authenticated %}
+    <button id="add_to_db" type="submit" name="add_to_db" class="btn btn-lg btn-dark">Add to your translator</button>
+    {% endif %}
+    <div id="error_mess"> </div>
+</form>
+    {% if user.is_authenticated %}
+        <table class="table" style="margin-top: 100px">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">lp</th>
+              <th scope="col">English word</th>
+              <th scope="col">Polish word</th>
+              <th scope="col">Del?</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for i in all_words %}
+            <tr id="{{ i.id }}" class="table_tr">
+              <th scope="row">{{ i.id }}</th>
+              <td>{{  i.word_eng }}</td>
+              <td>{{  i.word_pol }}</td>
+              <td><a href="#" value="{{ i.id }}">Delete</a></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+    {% endif %}
+    </div>
+
+                 {% endblock %}

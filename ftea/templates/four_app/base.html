@@ -1,0 +1,166 @@
+{%  load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<meta name="description" content="">
+        <meta name="keywords" content="">
+		<title>4first</title>
+		<!-- Favicon -->
+        <link href="{% static 'ftea/images/favicon.png' %}" rel="shortcut icon">
+        <link href="{% static 'ftea/images/favicon.png' %}" rel="shortcut icon">
+		<!-- CSS -->
+		<link href="{% static 'ftea/plugins/bootstrap/bootstrap.min.css' %}" rel="stylesheet">
+		<link href="{% static 'ftea/plugins/owl-carousel/owl.carousel.min.css' %}" rel="stylesheet">
+		<link href="{% static 'ftea/plugins/owl-carousel/owl.theme.default.min.css' %}" rel="stylesheet">
+		<link href="{% static 'ftea/plugins/magnific-popup/magnific-popup.min.css' %}" rel="stylesheet">
+		<link href="{% static 'ftea/css/app.css' %}" rel="stylesheet">
+		<!-- Fonts/Icons -->
+		<link href="{% static 'ftea/plugins/font-awesome/css/all.css' %}" rel="stylesheet">
+		<link href="{% static 'ftea/plugins/themify/themify-icons.min.css' %}" rel="stylesheet">
+	</head>
+	<body data-preloader="2">
+
+    <header>
+			<nav class="navbar navbar-fixed">
+				<div class="container-fluid padding-30 padding-top-0 padding-bottom-0">
+					<ul class="list-horizontal-unstyled">
+						<li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+						<li><a href="#"><i class="fab fa-twitter"></i></a></li>
+						<li><a href="#"><i class="fab fa-pinterest"></i></a></li>
+					</ul>
+					<a class="position-center" href="{% url 'ftea:index' %}">
+						<h4>4first</h4>
+					</a>
+					<!-- Toggle button of Fullscreen menu -->
+					<button class="fullscreen-toggle-btn">
+			            <span class="lines"></span>
+			        </button>
+				</div><!-- end container -->
+			</nav><!-- end navbar -->
+
+			<div class="fullscreen-menu bg-black"><!-- Add your background class here -->
+				<div class="fullscreen-menu-wrapper">
+					<div class="position-middle">
+						<div class="container">
+							<div class="row">
+								<div class="col-12 col-md-10 offset-md-1 col-lg-8 offset-lg-2">
+									<div class="row">
+										<div class="col-12 col-md-6">
+											<ul class="list-unstyled">
+												<li>
+													<h6 class="font-weight-normal uppercase letter-spacing-2px"><a class="hyperlink-7" href="#home">Home</a></h6>
+												</li>
+												<li>
+													<h6 class="font-weight-normal uppercase letter-spacing-2px"><a class="hyperlink-7" href="#about">About</a></h6>
+												</li>
+                                                {% if user.is_authenticated %}
+                                                <li>
+													<h6 class="font-weight-normal uppercase letter-spacing-2px"><a class="hyperlink-7" href="{% url 'logout' %}">Log out</a></h6>
+												</li>
+                                                {% else %}
+                                                <li>
+													<h6 class="font-weight-normal uppercase letter-spacing-2px"><a class="hyperlink-7" href="{% url 'login' %}">Log in</a></h6>
+												</li>
+                                                <li>
+													<h6 class="font-weight-normal uppercase letter-spacing-2px"><a class="hyperlink-7" href="#">Register</a></h6>
+												</li>
+                                                {% endif %}
+												<li>
+													<h6 class="font-weight-normal uppercase letter-spacing-2px"><a class="hyperlink-7" href="#">Welcome page</a></h6>
+												</li>
+                                            			<li>
+													<h6 class="font-weight-normal uppercase letter-spacing-2px"><a class="hyperlink-7" href="{% url 'ftea:translator' %}">Translator</a></h6>
+												</li>
+											</ul>
+										</div>
+										<div class="col-12 col-md-6">
+											<h5 class="font-weight-normal">Contact Info:</h5>
+											<ul class="list-unstyled">
+												<li>+48 694 037 695</li>
+												<li>contact@4first.pl</li>
+												<li>Drzymały 17/6<br/> 05-800 Pruszków</li>
+											</ul>
+											<ul class="list-horizontal-unstyled icon-sm margin-top-20">
+												<li><a class="button-circle button-circle-sm button-border-1px button-circle-outline-white" href="#"><i class="fab fa-facebook-f"></i></a></li>
+												<li><a class="button-circle button-circle-sm button-border-1px button-circle-outline-white" href="#"><i class="fab fa-twitter"></i></a></li>
+												<li><a class="button-circle button-circle-sm button-border-1px button-circle-outline-white" href="#"><i class="fab fa-instagram"></i></a></li>
+											</ul>
+										</div>
+									</div><!-- end row(inner) -->
+								</div>
+							</div><!-- end row(outer) -->
+						</div><!-- end container -->
+					</div><!-- end position-middle -->
+				</div><!-- end fullscreen-menu-wrapper -->
+			</div><!-- end fullscreen-menu -->
+		</header>
+
+
+            {% block content %}
+        {% endblock %}
+
+
+		<footer>
+			<div class="section-sm">
+				<div class="container padding-30 padding-top-0 padding-bottom-0">
+					<div class="row align-items-center">
+						<div class="col-12 col-md-6">
+							<h2>4first</h2>
+							<ul class="list-horizontal-dash margin-top-30">
+								<li><a class="hyperlink-7" href="#">FAQ</a></li>
+								<li><a class="hyperlink-7" href="#">Careers</a></li>
+								<li><a class="hyperlink-7" href="{% url 'ftea:translator' %}">Translator</a></li>
+							</ul>
+							<p class="margin-top-10">&copy; 2020 4first, All Rights Reserved.</p>
+						</div>
+						<div class="col-12 col-md-6 text-md-right">
+							<ul class="list-unstyled">
+								<li>Drzymały 17/6</li>
+								<li>05-800 Pruszków</li>
+								<li>writetous@4first.pl</li>
+								<li>+48 694 037 695</li>
+							</ul>
+							<ul class="list-horizontal-unstyled icon-sm margin-top-20">
+								<li>
+									<a class="button-circle button-circle-sm button-border-1px button-circle-outline-dark button-circle-hover-slide" href="#">
+										<i class="fab fa-facebook-f"></i>
+										<i class="fab fa-facebook-f"></i>
+									</a>
+								</li>
+								<li>
+									<a class="button-circle button-circle-sm button-border-1px button-circle-outline-dark button-circle-hover-slide" href="#">
+										<i class="fab fa-twitter"></i>
+										<i class="fab fa-twitter"></i>
+									</a>
+								</li>
+								<li>
+									<a class="button-circle button-circle-sm button-border-1px button-circle-outline-dark button-circle-hover-slide" href="#">
+										<i class="fab fa-instagram"></i>
+										<i class="fab fa-instagram"></i>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div><!-- end row -->
+				</div><!-- end container -->
+			</div><!-- end footer -->
+		</footer>
+
+		<!-- ***** JAVASCRIPTS ***** -->
+		<script src="{% static 'ftea/plugins/jquery.min.js' %}"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcfbzeDrQKgGyr6s7sLIIkaFZ1Cverc7c"></script>
+		<script src="{% static 'ftea/plugins/plugins.js' %}"></script>
+		<script src="{% static 'ftea/js/functions.js' %}"></script>
+		<script src="{% static 'ftea/js/ajax.js' %}"></script>
+	</body>
+</html>
+
+
+
+
