@@ -60,6 +60,7 @@ coverage.xml
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+settings.py
 
 # Flask stuff:
 instance/
@@ -109,6 +110,7 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+ve-ftea/
 
 # Spyder project settings
 .spyderproject
@@ -127,3 +129,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+#my
+
+*settings
+*ve-ftea/
+*passenger_wsgi.py
