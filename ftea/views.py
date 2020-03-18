@@ -79,7 +79,7 @@ class Translator(View):
                            "new_id": new_id}
                 return HttpResponse(json.dumps(ctx))
         else:
-            all_words = models.Translator.objects.order_by('word_eng')
+            all_words = models.Translator.objects.filter(translator_user=request.user)
             ctx = {'all_words': all_words}
             return render(request, 'ftea/translator.html', ctx)
 
