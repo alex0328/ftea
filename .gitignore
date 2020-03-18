@@ -132,6 +132,7 @@ dmypy.json
 
 #my
 
-*settings
-*ve-ftea/
-*passenger_wsgi.py
+**/settings.py
+**/ve-ftea/
+**/passenger_wsgi.py
+**/migrations
