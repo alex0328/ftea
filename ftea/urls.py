@@ -6,5 +6,5 @@ app_name = 'ftea'
 urlpatterns = [
     path('', views.Index.as_view(), name='index'),
     path('welcome/', views.Welcome.as_view(), name='welcome'),
-    path('translator/', views.Translator1.as_view(), name='translator'),
+    path('translator/', views.Translator.as_view(), name='translator'),
     ]

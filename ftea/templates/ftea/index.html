@@ -196,7 +196,7 @@ The main principle of automation is to identify tasks in your processes where a 
 						<div class="bg-black-07 border-radius padding-40">
 							<div class="d-flex align-items-center margin-bottom-20">
 								<div class="d-inline-block margin-right-20">
-									<img class="img-circle-sm" src="../assets/images/img-circle-small.jpg" alt="">
+									<img class="img-circle-sm" src="{% static 'ftea/images/img-circle-small.jpg' %}" alt="">
 								</div>
 								<div class="d-inline-block">
 									<h5 class="font-weight-normal margin-0 line-height-140">Emiley Haley</h5>
@@ -209,7 +209,7 @@ The main principle of automation is to identify tasks in your processes where a 
 						<div class="bg-black-07 border-radius padding-40">
 							<div class="d-flex align-items-center margin-bottom-20">
 								<div class="d-inline-block margin-right-20">
-									<img class="img-circle-sm" src="../assets/images/img-circle-small.jpg" alt="">
+									<img class="img-circle-sm" src="{% static 'ftea/images/img-circle-small.jpg' %}" alt="">
 								</div>
 								<div class="d-inline-block">
 									<h5 class="font-weight-normal margin-0 line-height-140">Andrew Palmer</h5>
@@ -222,7 +222,7 @@ The main principle of automation is to identify tasks in your processes where a 
 						<div class="bg-black-07 border-radius padding-40">
 							<div class="d-flex align-items-center margin-bottom-20">
 								<div class="d-inline-block margin-right-20">
-									<img class="img-circle-sm" src="../assets/images/img-circle-small.jpg" alt="">
+									<img class="img-circle-sm" src="{% static 'ftea/images/img-circle-small.jpg' %}" alt="">
 								</div>
 								<div class="d-inline-block">
 									<h5 class="font-weight-normal margin-0 line-height-140">Anna Mullen</h5>
@@ -235,7 +235,7 @@ The main principle of automation is to identify tasks in your processes where a 
 						<div class="bg-black-07 border-radius padding-40">
 							<div class="d-flex align-items-center margin-bottom-20">
 								<div class="d-inline-block margin-right-20">
-									<img class="img-circle-sm" src="../assets/images/img-circle-small.jpg" alt="">
+									<img class="img-circle-sm" src="{% static 'ftea/images/img-circle-small.jpg' %}" alt="">
 								</div>
 								<div class="d-inline-block">
 									<h5 class="font-weight-normal margin-0 line-height-140">John Smith</h5>
@@ -303,6 +303,7 @@ The main principle of automation is to identify tasks in your processes where a 
 					<div class="col-12 col-sm-6 col-md-3">
 						<i class="ti ti-mobile text-dark margin-bottom-20"></i>
 						<h6 class="font-weight-normal margin-0">Phone</h6>
+						<p>+48 694 037 695</p>
 						<p>+44 07459 205 133</p>
 					</div>
 					<!-- Icon text box 3 -->
@@ -327,15 +328,17 @@ The main principle of automation is to identify tasks in your processes where a 
 			<div class="container padding-30 padding-top-0 padding-bottom-0">
 				<div class="contact-form">
 					<form method="post" id="contactform" class="form-style-3">
-						<div class="form-row">
-							<div class="col-12 col-sm-6">
-								<input type="text" id="name" name="name" placeholder="Name" required>
-							</div>
-							<div class="col-12 col-sm-6">
-								<input type="email" id="email" name="email" placeholder="E-Mail" required>
-							</div>
-						</div>
-						<textarea name="message" id="message" placeholder="Message"></textarea>
+                        {% csrf_token %}
+                        {{ form }}
+{#						<div class="form-row">#}
+{#							<div class="col-12 col-sm-6">#}
+{#								<input type="text" id="name" name="name" placeholder="Name" required>#}
+{#							</div>#}
+{#							<div class="col-12 col-sm-6">#}
+{#								<input type="email" id="email" name="email" placeholder="E-Mail" required>#}
+{#							</div>#}
+{#						</div>#}
+{#						<textarea name="message" id="message" placeholder="Message"></textarea>#}
 						<button class="button button-lg button-border-1px button-radius button-outline-dark-2" type="submit">Send Message</button>
 					</form>
 					<!-- Submit result -->

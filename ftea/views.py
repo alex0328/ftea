@@ -1,18 +1,34 @@
 import json
-
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 from ftea.forms import TranslateForm
 from googletrans import Translator as GoogleTrans
-from ftea import models
+from ftea import models, forms
 from django.db.models import Q
+from django.core.mail import send_mail, BadHeaderError
 
 
 
 # Create your views here.
 class Index(View):
     def get(self, request):
+        form = forms.ContactForm
+        ctx = {"form": form}
+        return render(request, 'ftea/index.html', ctx)
+
+    def post(self, request):
+        form = forms.ContactForm(request.POST)
+        if form.is_valid():
+            name = request.POST.get('name')
+            email = request.POST.get('email')
+            message = request.POST.get('message')
+            email = "Kontakt od: {}, email: {}, wiadomosc: {}".format(name, email, message)
+            try:
+                send_mail('Kontakt z 4tea.pl', email, 'lukasz.szlaszynski@4tea.pl', ['lukasz.szlaszynski@4tea.pl'])
+            except BadHeaderError:
+                return HttpResponse('Invalid header found.')
+            mess = "Mess sent"
         return render(request, 'ftea/index.html')
 
 class Welcome(View):
@@ -20,100 +36,6 @@ class Welcome(View):
         return render(request, 'ftea/welcome.html')
 
 class Translator(View):
-    def get(self, request):
-        if request.is_ajax():
-            return HttpResponse(json.dumps(ctx))
-        else:
-            all_words = models.Translator.objects.all()
-            ctx = {'all_words': all_words}
-            return render(request, 'ftea/translator.html', ctx)
-
-    def post(self, request):
-        pol_word = 'pol'
-        eng_word = 'eng'
-        all_words = 'all'
-        print(request.POST)
-        if 'check_meaning' in request.POST:
-            translator = GoogleTrans()
-            if request.POST.get('Word_eng') and request.POST.get('Word_pol'):
-                print("oba")
-                models.Translator.objects.all()
-                all_words = models.Translator.objects.all()
-                ctx = {"all_words": all_words}
-                if request.is_ajax():
-                    print(request.POST)
-                    print('ajax pierwszejszy')
-                    return HttpResponse(json.dumps(ctx))
-                else:
-                    print(request.POST)
-                    print('nie ajax')
-                    return render(request, 'ftea/translator.html', ctx)
-            elif request.POST.get('Word_pol'):
-                print("pol")
-                post_content = request.POST['Word_pol']
-                word = translator.translate(post_content, dest='en', src='pl')
-                pol_word = request.POST.get('Word_pol')
-                eng_word = word.text
-            elif request.POST.get('Word_eng'):
-                print("eng_word")
-                post_content = request.POST['Word_eng']
-                word = translator.translate(post_content, dest='pl', src='en')
-                eng_word = request.POST.get('Word_eng')
-                pol_word = word.text
-            else:
-                print("żodyn")
-                if request.is_ajax():
-                    print(request.POST)
-                    print('ajax pierwszy')
-                    print(HttpResponse("nic"))
-                    return HttpResponse("nic")
-                else:
-                    all_words = models.Translator.objects.all()
-                    ctx = {"all_words": all_words}
-                    print(request.POST)
-                    print('nie ajax')
-                    return render(request, 'ftea/translator.html', ctx)
-        elif 'add_to_db' in request.POST:
-            if request.POST.get('Word_eng') and request.POST.get('Word_pol'):
-                print(request.user)
-                pol_word = request.POST.get('Word_pol')
-                eng_word = request.POST.get('Word_eng')
-                check_word = models.Translator.objects.filter(Q(translator_user=request.user) & Q(word_eng=eng_word) & Q(word_pol=pol_word))
-                if check_word:
-                    print("już jest")
-                else:
-                    new_word = models.Translator(translator_user=request.user,
-                                                 word_eng=eng_word,
-                                                 word_pol=pol_word)
-                    new_word.save()
-                all_words = models.Translator.objects.all()
-                ctx = {"all_words": all_words}
-                if request.is_ajax():
-                    print(request.POST)
-                    print('ajax przedostatni')
-                    print(HttpResponse(json.dumps(ctx)))
-                    return HttpResponse(json.dumps(ctx))
-                else:
-                    print(request.POST)
-                    print('nie ajax')
-                    return render(request, 'ftea/translator.html', ctx)
-            all_words = models.Translator.objects.all()
-        ctx = {"pol_word": pol_word,
-               "eng_word": eng_word,
-               "all_words": all_words,
-               }
-        if request.is_ajax():
-            print(request.POST)
-            print('ajax ostatni')
-            print(HttpResponse(json.dumps(ctx)))
-            return HttpResponse(json.dumps(ctx))
-        else:
-            print(request.POST)
-            print('nie ajax')
-            return render(request, 'ftea/translator.html', ctx)
-
-
-class Translator1(View):
     def get(self, request):
         translator = GoogleTrans()
         if request.is_ajax():
