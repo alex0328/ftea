@@ -75,25 +75,17 @@ WSGI_APPLICATION = 'public_python.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'NAME': 'p1288_4tea', ## nazwa bazy danych
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'USER': 'p1288_4tea',
-#         'PASSWORD': 'CSmXiSKlCcUd2RxvLJeh',
-#         'HOST': 'pgsql29.mydevil.net'
-#     }
-# }
-
 DATABASES = {
     'default': {
-        'NAME': 'four_app', ## nazwa bazy danych
+        'NAME': 'p1288_4tea', ## nazwa bazy danych
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'USER': 'database',
-        'PASSWORD': 'localhost',
-        'HOST': 'localhost'
+        'USER': 'p1288_4tea',
+        'PASSWORD': 'CSmXiSKlCcUd2RxvLJeh',
+        'HOST': 'pgsql29.mydevil.net'
     }
 }
+
+
 
 
 # Password validation
