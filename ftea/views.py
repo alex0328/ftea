@@ -13,7 +13,7 @@ from django.db.models import Q
 # Create your views here.
 class Index(View):
     def get(self, request):
-        return render(request, 'ftea/index1.html')
+        return render(request, 'ftea/index.html')
 
 class Welcome(View):
     def get(self, request):
