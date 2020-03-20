@@ -3,7 +3,138 @@
 {% block content %}
 
 
-<blebleble>dfsdfsdfsdfsdf</blebleble>
 
+		<div class="section-lg bg-image bg-image-gradient parallax" style="background-image: url({% static 'ftea/img1/back1.jpg)' %}">
+
+
+    		<!-- Testimonial section -->
+		<div class="section border-top">
+			<div class="container">
+				<div class="owl-carousel" data-owl-margin="30" data-owl-xs="1" data-owl-sm="1" data-owl-md="1" data-owl-lg="2" data-owl-xl="2" data-owl-nav="true">
+					<!-- Testimonial box 1 -->
+					<div class="border-radius bg-white border-all padding-30">
+						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
+							<div class="d-inline-block">
+								<h5 class="font-weight-normal line-height-140 margin-0">Projects</h5>
+							</div>
+						</div>
+<ul>
+    {% for project in projects %}
+        <li><div><span><a href="{% url 'ftea:project' project.id %}"> {{ project.project_name }}</a></span>
+            <span class="project_status">{{ project.project_status }}</span></div></li>
+    {% endfor %}
+</ul>
+					</div>
+					<!-- Testimonial box 2 -->
+					<div class="border-radius bg-white border-all padding-30">
+						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
+							<div class="d-inline-block">
+								<h5 class="font-weight-normal line-height-140 margin-0">Robert Vincent</h5>
+								<span class="font-small font-weight-normal">Marketer - Mono</span>
+							</div>
+							<div class="d-inline-block text-yellow">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+							</div>
+						</div>
+						<p>"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."</p>
+					</div>
+					<!-- Testimonial box 3 -->
+					<div class="border-radius bg-white border-all padding-30">
+						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
+							<div class="d-inline-block">
+								<h5 class="font-weight-normal line-height-140 margin-0">Andrew Palmer</h5>
+								<span class="font-small font-weight-normal">Developer - Mono</span>
+							</div>
+							<div class="d-inline-block text-yellow">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+							</div>
+						</div>
+						<p>"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."</p>
+					</div>
+					<!-- Testimonial box 4 -->
+					<div class="border-radius bg-white border-all padding-30">
+						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
+							<div class="d-inline-block">
+								<h5 class="font-weight-normal line-height-140 margin-0">Rodney Scott</h5>
+								<span class="font-small font-weight-normal">Designer - Mono</span>
+							</div>
+							<div class="d-inline-block text-yellow">
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+								<i class="fas fa-star"></i>
+							</div>
+						</div>
+						<p>"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."</p>
+					</div>
+				</div><!-- end owl-carousel -->
+			</div><!-- end container -->
+		</div>
+		<!-- end Testimonial section -->
+            		</div>
+
+		<div class="section-lg padding-top-0">
+			<div class="container">
+				<div class="row icon-5xl text-center">
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="border-all border-radius padding-40 hover-shadow hover-float">
+							<i class="ti-camera text-dark"></i>
+							<h5 class="font-weight-normal margin-top-20">Photoshoot</h5>
+							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="border-all border-radius padding-40 hover-shadow hover-float">
+							<i class="ti-announcement text-dark"></i>
+							<h5 class="font-weight-normal margin-top-20">Social Marketing</h5>
+							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="border-all border-radius padding-40 hover-shadow hover-float">
+							<i class="ti-comment-alt text-dark"></i>
+							<h5 class="font-weight-normal margin-top-20">Consulting</h5>
+							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="border-all border-radius padding-40 hover-shadow hover-float">
+							<i class="ti-star text-dark"></i>
+							<h5 class="font-weight-normal margin-top-20">Branding</h5>
+							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="border-all border-radius padding-40 hover-shadow hover-float">
+							<i class="ti-world text-dark"></i>
+							<h5 class="font-weight-normal margin-top-20">Web Development</h5>
+							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
+						</div>
+					</div>
+					<div class="col-12 col-md-6 col-lg-4">
+						<div class="border-all border-radius padding-40 hover-shadow hover-float">
+							<i class="ti-ruler-pencil text-dark"></i>
+							<h5 class="font-weight-normal margin-top-20">Graphic Design</h5>
+							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
+							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
+						</div>
+					</div>
+				</div><!-- end row -->
+			</div><!-- end container -->
+		</div>
 
 {% endblock %}

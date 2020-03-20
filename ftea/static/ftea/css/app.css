@@ -11712,3 +11712,7 @@ div[class^='bg-black'] .border-all, div[class^='bg-black'] .border-y, div[class^
   margin-left: 30px;
   margin-right: 30px;
 }
+
+.project_status {
+  padding: 20px;
+}

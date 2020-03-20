@@ -13,8 +13,11 @@ from django.core.mail import send_mail, BadHeaderError
 # Create your views here.
 class Index(View):
     def get(self, request):
-        form = forms.ContactForm
-        ctx = {"form": form}
+        if request.is_ajax():
+            pass
+        else:
+            form = forms.ContactForm
+            ctx = {"form": form}
         return render(request, 'ftea/index.html', ctx)
 
     def post(self, request):
@@ -79,7 +82,10 @@ class Translator(View):
                            "new_id": new_id}
                 return HttpResponse(json.dumps(ctx))
         else:
-            all_words = models.Translator.objects.filter(translator_user=request.user)
+            if request.user.is_authenticated:
+                all_words = models.Translator.objects.filter(translator_user=request.user)
+            else:
+                all_words = {}
             ctx = {'all_words': all_words}
             return render(request, 'ftea/translator.html', ctx)
 
@@ -96,3 +102,17 @@ class Translator(View):
         all_words = models.Translator.objects.order_by('pk')
         ctx = {'all_words': all_words}
         return render(request, 'ftea/translator.html', ctx)
+
+class Welcome(View):
+    def get(self, request):
+        projects = models.Project.objects.filter(project_user=request.user)
+        ctx = {
+            "projects": projects
+        }
+        return render(request, 'ftea/welcome.html', ctx)
+
+class Project_View(View):
+    def get(self, request, id):
+        project = models.Project.objects.filter(id=id)
+        ctx = {'project': project}
+        return render(request, 'ftea/project.html', ctx)
