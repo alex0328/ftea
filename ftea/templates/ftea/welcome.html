@@ -46,6 +46,7 @@
 {% endfor %}
   </tbody>
   </table>
+                    <a class="btn-dark" href="{% url 'ftea:add_project' %}">Add project</a>
 					</div>
 					<!-- Testimonial box 2 -->
 					<div class="border-radius bg-white border-all padding-30">
@@ -81,6 +82,7 @@
 {% endfor %}
   </tbody>
   </table>
+                    <a class="btn-dark" href="{% url 'ftea:add_task' %}">Add task</a>
 
 
 					</div>
@@ -92,15 +94,27 @@
 								<span class="font-small font-weight-normal">all periods</span>
 							</div>
                         </div>
-<ul>
-    {% for prio_task in high_prio_tasks %}
-        <li><div><span><a href="{% url 'ftea:project' prio_task.id %}"> {{ prio_task.task_name }}</a></span>
-            <span class="project_status">{{ prio_task.task_status }}</span>
-            <span class="project_status">{{ prio_task.task_prio }}</span>
-            <span class="project_deadline">{{ prio_task.task_deadline }}</span></div></li>
-    {% endfor %}
-</ul>
 
+                                                                    <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Project</th>
+      <th scope="col">Deadline</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for prio_task in high_prio_tasks %}
+    <tr style="background-color: #fff1f1">
+        <td><a href="{% url 'ftea:project' prio_task.id %}"> {{ prio_task.task_name }}</a></td>
+        <td class="project_status">{{ prio_task.task_status }}</td>
+        <td class="project_status">{{ prio_task.task_project }}</td>
+        <td class="project_status">{{ prio_task.deadline| date:'Y-m-d' }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+  </table>
 
 					</div>
 					<!-- Testimonial box 4 -->

@@ -39,13 +39,12 @@ class Project(models.Model):
     project_notes = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    project_status = models.CharField(choices=PROJECT_STATUS, max_length=50)
+    project_status = models.CharField(choices=PROJECT_STATUS, max_length=50, default=PROJECT_STATUS[0][0])
 
     def __str__(self):
         return self.project_name
 
 class Tasks(models.Model):
-    task_user = models.ForeignKey(User, on_delete=models.CASCADE)
     task_name = models.CharField(max_length=200)
     task_description = models.TextField(blank=True, null=True)
     task_notes = models.TextField(blank=True, null=True)
@@ -54,7 +53,7 @@ class Tasks(models.Model):
     deadline = models.DateField(null=True, blank=True)
     task_prio = models.CharField(choices=TASK_PRIO, max_length=50, default=TASK_PRIO[1][1])
     task_project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True)
-    task_status = models.CharField(choices=TASK_STATUS, max_length=50)
+    task_status = models.CharField(choices=TASK_STATUS, max_length=50, default=TASK_STATUS[0][0])
 
     def __str__(self):
         return self.task_name

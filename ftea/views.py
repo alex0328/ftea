@@ -135,3 +135,17 @@ class ProjectCreate(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.project_user = self.request.user
         return super().form_valid(form)
+
+class TaskCreate(CreateView):
+    form_class = forms.TaskForm
+    template_name = 'ftea/tasks_form.html'
+    success_url = reverse_lazy("ftea:welcome")
+
+    def get_form_kwargs(self):
+        kwargs = super(TaskCreate, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        form.instance.project_user = self.request.user
+        return super().form_valid(form)

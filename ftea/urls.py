@@ -8,6 +8,7 @@ urlpatterns = [
     path('welcome/', views.Welcome.as_view(), name='welcome'),
     path('project/<int:id>', views.Project_View.as_view(), name='project'),
     path('addproject/', views.ProjectCreate.as_view(), name='add_project'),
+    path('addtask/', views.TaskCreate.as_view(), name='add_task'),
     path('translator/', views.Translator.as_view(), name='translator'),
 
     ]
