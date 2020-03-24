@@ -15,6 +15,12 @@ TASK_STATUS = [
     ('hold', 'hold')
 ]
 
+TASK_PRIO = [
+    ('low', 'low'),
+    ('medium', 'medium'),
+    ('high', 'high')
+]
+
 class Translator(models.Model):
     translator_user = models.ForeignKey(User, on_delete=models.CASCADE)
     word_eng = models.CharField(max_length=200)
@@ -46,6 +52,7 @@ class Tasks(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     deadline = models.DateField(null=True, blank=True)
+    task_prio = models.CharField(choices=TASK_PRIO, max_length=50, default=TASK_PRIO[1][1])
     task_project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True)
     task_status = models.CharField(choices=TASK_STATUS, max_length=50)
 

@@ -3,13 +3,86 @@
 {% block content %}
 
 
+
+
+    		<div class="section-lg bg-image bg-image-gradient parallax" style="background-image: url({% static 'ftea/img1/back1.jpg)' %}">
+
+
+    		<!-- Testimonial section -->
+		<div class="section border-top">
+			<div class="container">
+				<div class="owl-carousel" data-owl-margin="30" data-owl-xs="1" data-owl-sm="1" data-owl-md="1" data-owl-lg="2" data-owl-xl="2" data-owl-nav="true">
+					<!-- Testimonial box 1 -->
+					<div class="border-radius bg-white border-all padding-30">
+						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
+							<div class="d-inline-block">
+								<h5 class="font-weight-normal line-height-140 margin-0">Projects</h5>
+							</div>
+						</div>
+<ul>
                             {% for task in project %}
-							<h2>{{ task.project_name}}</h2>
+							<h2>{{ task.project_name}} </h2>
+
+                                  <li> <p>Opis: {{ task.project_description }}</p></li>
+                                  <li> <p>Data utworzenia: {{ task.created_at|date:'Y-m-d H:i' }}</p></li>
+                                  <li> <p>Status: {{ task.project_status }}</p><button>Change status</button><br>
+                                  <button>Delete project</button></li>
+                           {% endfor %}
+</ul>
+					</div>
+                <!-- Testimonial box 1 -->
+                					<div class="border-radius bg-white border-all padding-30">
+						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
+							<div class="d-inline-block">
+								<h5 class="font-weight-normal line-height-140 margin-0">Tasks to this project</h5>
+							</div>
+						</div>
+<ul>
+                            {% for i in project %}
+                                <h2>To do</h2>
+                                {%  for j in i.tasks_set.all %}
+
+                                    <li>Task name: {{ j.task_name }} </li>
+                                    <ul>
+                                    <li>Task description: {{ j.task_description }}</li>
+                                    <li>Tast status: {{ j.task_status }} <button>Change status</button></li>
+
+</ul>
+
+                                {% endfor %}
+                            {% endfor %}
+</ul>
+
+{#                                  <li> <p>Opis: {{ task.project_description }}</p></li>#}
+{#                                  <li> <p>Data utworzenia: {{ task.project_creation_date|date:'Y-m-d H:i' }}</p></li>#}
+{#                                  <li> <p>Data startu: {{ task.project_start_date|date:'Y-m-d H:i' }}</p></li>#}
+{#                                  <li> <p>Data zakończenia: {{ task.project_end_date|date:'Y-m-d H:i' }}</p></li>#}
+{#                                  <li> <p>Status: {{ task.project_status }}</p></li>#}
+
+
+					</div>
+                <!-- Testimonial box 1 -->
+                					<div class="border-radius bg-white border-all padding-30">
+						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
+							<div class="d-inline-block">
+								<h5 class="font-weight-normal line-height-140 margin-0">Tasks to this project</h5>
+							</div>
+						</div>
+<ul>
+                            {% for task in project %}
+							<h2>Done</h2>
                                   <li> <p>Opis: {{ task.project_description }}</p></li>
                                   <li> <p>Data utworzenia: {{ task.project_creation_date|date:'Y-m-d H:i' }}</p></li>
                                   <li> <p>Data startu: {{ task.project_start_date|date:'Y-m-d H:i' }}</p></li>
                                   <li> <p>Data zakończenia: {{ task.project_end_date|date:'Y-m-d H:i' }}</p></li>
                                   <li> <p>Status: {{ task.project_status }}</p></li>
                            {% endfor %}
+</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+            		</div>
 
   {% endblock %}
+

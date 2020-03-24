@@ -1,7 +1,12 @@
 import json
+
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View
+from django.views.generic import CreateView
+from datetime import datetime, timedelta
 from ftea.forms import TranslateForm
 from googletrans import Translator as GoogleTrans
 from ftea import models, forms
@@ -33,10 +38,6 @@ class Index(View):
                 return HttpResponse('Invalid header found.')
             mess = "Mess sent"
         return render(request, 'ftea/index.html')
-
-class Welcome(View):
-    def get(self, request):
-        return render(request, 'ftea/welcome.html')
 
 class Translator(View):
     def get(self, request):
@@ -103,16 +104,34 @@ class Translator(View):
         ctx = {'all_words': all_words}
         return render(request, 'ftea/translator.html', ctx)
 
-class Welcome(View):
+class Welcome(LoginRequiredMixin, View):
     def get(self, request):
+        todays_date = datetime.today()
+        next_seven_days = todays_date + timedelta(days=7)
+        first_date = todays_date - timedelta(days=99999)
+        print(next_seven_days)
         projects = models.Project.objects.filter(project_user=request.user)
+        this_week_tasks = models.Tasks.objects.filter(deadline__range=(first_date, next_seven_days)).filter(task_project__project_user=request.user)
+        high_prio_tasks = models.Tasks.objects.filter(task_prio='high').filter(task_project__project_user=request.user)
         ctx = {
-            "projects": projects
+            "projects": projects,
+            "this_week_tasks": this_week_tasks,
+            "high_prio_tasks": high_prio_tasks
         }
         return render(request, 'ftea/welcome.html', ctx)
 
-class Project_View(View):
+class Project_View(LoginRequiredMixin, View):
     def get(self, request, id):
         project = models.Project.objects.filter(id=id)
         ctx = {'project': project}
         return render(request, 'ftea/project.html', ctx)
+
+#addproject/
+class ProjectCreate(LoginRequiredMixin, CreateView):
+    model = models.Project
+    fields = ['project_name','project_description', 'project_status']
+    success_url = reverse_lazy("ftea:welcome")
+
+    def form_valid(self, form):
+        form.instance.project_user = self.request.user
+        return super().form_valid(form)

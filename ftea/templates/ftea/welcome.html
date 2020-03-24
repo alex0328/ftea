@@ -18,46 +18,90 @@
 								<h5 class="font-weight-normal line-height-140 margin-0">Projects</h5>
 							</div>
 						</div>
-<ul>
-    {% for project in projects %}
-        <li><div><span><a href="{% url 'ftea:project' project.id %}"> {{ project.project_name }}</a></span>
-            <span class="project_status">{{ project.project_status }}</span></div></li>
-    {% endfor %}
-</ul>
+                            <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Project</th>
+      <th scope="col">Status</th>
+      <th scope="col">Created at</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for project in projects %}
+    {%  if project.project_status == "new" %}
+    <tr style="background-color: #e0fcff">
+    {% elif project.project_status == "in progres" %}
+    <tr style="background-color: #dfffe2">
+    {% elif project.project_status == "done" %}
+    <tr style="background-color: rgba(0,0,0,0.63)">
+    {% elif project.project_status == "postponed" %}
+    <tr style="background-color: rgba(0,0,0,0.63)">
+    {% else %}
+    <tr style="background-color: #f2ffe6">
+    {% endif %}
+        <td><a href="{% url 'ftea:project' project.id %}"> {{ project.project_name }}</a></td>
+        <td class="project_status">{{ project.project_status }}</td>
+        <td class="project_status">{{ project.created_at| date:'Y-m-d' }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+  </table>
 					</div>
 					<!-- Testimonial box 2 -->
 					<div class="border-radius bg-white border-all padding-30">
 						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
 							<div class="d-inline-block">
-								<h5 class="font-weight-normal line-height-140 margin-0">Robert Vincent</h5>
-								<span class="font-small font-weight-normal">Marketer - Mono</span>
+								<h5 class="font-weight-normal line-height-140 margin-0">All tasks with this week deadline</h5>
 							</div>
-							<div class="d-inline-block text-yellow">
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-							</div>
-						</div>
-						<p>"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."</p>
+                        </div>
+
+                                                <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Project</th>
+      <th scope="col">Created at</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for task in this_week_tasks %}
+{%  if task.task_prio == "high" %}
+    <tr style="background-color: #fff1f1">
+    {% elif task.task_prio == "low" %}
+    <tr style="background-color: #f1ffe5">
+    {% else %}
+    <tr style="background-color: #f2ffe6">
+    {% endif %}
+        <td><a href="{% url 'ftea:project' task.id %}"> {{ task.task_name }}</a></td>
+        <td class="project_status">{{ task.task_status }}</td>
+        <td class="project_status">{{ task.task_project }}</td>
+        <td class="project_status">{{ task.created_at| date:'Y-m-d' }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+  </table>
+
+
 					</div>
 					<!-- Testimonial box 3 -->
 					<div class="border-radius bg-white border-all padding-30">
 						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
 							<div class="d-inline-block">
-								<h5 class="font-weight-normal line-height-140 margin-0">Andrew Palmer</h5>
-								<span class="font-small font-weight-normal">Developer - Mono</span>
+								<h5 class="font-weight-normal line-height-140 margin-0">High prio tasks</h5>
+								<span class="font-small font-weight-normal">all periods</span>
 							</div>
-							<div class="d-inline-block text-yellow">
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-							</div>
-						</div>
-						<p>"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."</p>
+                        </div>
+<ul>
+    {% for prio_task in high_prio_tasks %}
+        <li><div><span><a href="{% url 'ftea:project' prio_task.id %}"> {{ prio_task.task_name }}</a></span>
+            <span class="project_status">{{ prio_task.task_status }}</span>
+            <span class="project_status">{{ prio_task.task_prio }}</span>
+            <span class="project_deadline">{{ prio_task.task_deadline }}</span></div></li>
+    {% endfor %}
+</ul>
+
+
 					</div>
 					<!-- Testimonial box 4 -->
 					<div class="border-radius bg-white border-all padding-30">
@@ -136,5 +180,179 @@
 				</div><!-- end row -->
 			</div><!-- end container -->
 		</div>
+
+
+    <!-- Fakju -->
+
+
+
+		<div class="section">
+			<div class="container">
+				<div class="row">
+					<div class="col-12 col-sm-10 offset-sm-1">
+						<ul class="nav nav-pills margin-bottom-50 justify-content-center heading-uppercase">
+							<li class="nav-item">
+								<a class="nav-link active" data-toggle="tab" href="#first">First</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#second">Second</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#third">Third</a>
+							</li>
+                            							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#fourth">Fourth</a>
+							</li>
+                            							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#fivth">Fivth</a>
+							</li>
+                                                							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#sixth">Fivth</a>
+							</li>
+                                                							<li class="nav-item">
+								<a class="nav-link" data-toggle="tab" href="#seventh">Fivth</a>
+							</li>
+						</ul><!-- end nav-pills -->
+						<div class="tab-content">
+							<!-- Tab 1 -->
+							<div class="tab-pane fade show active" id="first">
+								<div>
+									<h6 class="font-weight-normal">Question One?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Two?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Three?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Four?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+							</div>
+							<!-- Tab 2 -->
+							<div class="tab-pane fade" id="second">
+								<div>
+									<h6 class="font-weight-normal">Question One?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Two?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Three?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Four?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+							</div>
+                            							<!-- Tab 3 -->
+							<div class="tab-pane fade" id="third">
+								<div>
+									<h6 class="font-weight-normal">Question One?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Two?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Three?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Four?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+							</div>
+                            							<!-- Tab 4 -->
+							<div class="tab-pane fade" id="fourth">
+								<div>
+									<h6 class="font-weight-normal">Question One?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Two?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Three?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Four?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+							</div>
+                            <!-- Tab 5 -->
+							<div class="tab-pane fade" id="fivth">
+								<div>
+									<h6 class="font-weight-normal">Question One?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Two?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Three?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Four?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+							</div>
+                            <!-- Tab 6 -->
+							<div class="tab-pane fade" id="sixth">
+								<div>
+									<h6 class="font-weight-normal">Question One?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Two?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Three?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Four?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+							</div>
+							<!-- Tab 7 -->
+							<div class="tab-pane fade" id="seventh">
+								<div>
+									<h6 class="font-weight-normal">Question One?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Two?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Three?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+								<div class="margin-top-30">
+									<h6 class="font-weight-normal">Question Four?</h6>
+									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
+								</div>
+							</div>
+						</div><!-- end tab-content -->
+					</div>
+				</div><!-- end row -->
+			</div><!-- end container -->
+		</div>
+
+</html>
 
 {% endblock %}
