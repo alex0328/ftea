@@ -117,14 +117,10 @@ class Welcome(LoginRequiredMixin, View):
         first_date = todays_date - timedelta(days=99999)
         print(next_seven_days)
         projects = models.Project.objects.filter(project_user=request.user)
-        # this_week_tasks = models.Tasks.objects.filter(deadline__range=(first_date, next_seven_days)).filter(task_project__project_user=request.user)
-        # this_30_tasks = models.Tasks.objects.filter(deadline__range=(first_date, next_30_days)).filter(task_project__project_user=request.user)
-        # high_prio_tasks = models.Tasks.objects.filter(task_prio='high').filter(task_project__project_user=request.user)
+
         ctx = {
             "projects": projects,
-            # "this_week_tasks": this_week_tasks,
-            # "this_30_tasks": this_30_tasks,
-            # "high_prio_tasks": high_prio_tasks
+
         }
         return render(request, 'ftea/welcome.html', ctx)
 
