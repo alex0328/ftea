@@ -29,3 +29,8 @@ class TaskForm(forms.ModelForm):
        user = kwargs.pop('user')
        super(TaskForm, self).__init__(*args, **kwargs)
        self.fields['task_project'].queryset = models.Project.objects.filter(project_user=user)
+
+class TaskForm_change_status(forms.ModelForm):
+    class Meta:
+       model = models.Tasks
+       fields = ('task_status',)

@@ -1,5 +1,6 @@
 import json
 
+import django
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -12,7 +13,11 @@ from googletrans import Translator as GoogleTrans
 from ftea import models, forms
 from django.db.models import Q
 from django.core.mail import send_mail, BadHeaderError
-
+import pytesseract
+from PIL import Image
+import os
+from django.contrib.auth.models import User
+import xlwt
 
 
 # Create your views here.
@@ -108,14 +113,17 @@ class Welcome(LoginRequiredMixin, View):
     def get(self, request):
         todays_date = datetime.today()
         next_seven_days = todays_date + timedelta(days=7)
+        next_30_days = todays_date + timedelta(days=30)
         first_date = todays_date - timedelta(days=99999)
         print(next_seven_days)
         projects = models.Project.objects.filter(project_user=request.user)
         this_week_tasks = models.Tasks.objects.filter(deadline__range=(first_date, next_seven_days)).filter(task_project__project_user=request.user)
+        this_30_tasks = models.Tasks.objects.filter(deadline__range=(first_date, next_30_days)).filter(task_project__project_user=request.user)
         high_prio_tasks = models.Tasks.objects.filter(task_prio='high').filter(task_project__project_user=request.user)
         ctx = {
             "projects": projects,
             "this_week_tasks": this_week_tasks,
+            "this_30_tasks": this_30_tasks,
             "high_prio_tasks": high_prio_tasks
         }
         return render(request, 'ftea/welcome.html', ctx)
@@ -136,6 +144,22 @@ class ProjectCreate(LoginRequiredMixin, CreateView):
         form.instance.project_user = self.request.user
         return super().form_valid(form)
 
+class Task_View(LoginRequiredMixin, View):
+    def get(self, request, id):
+        task = models.Tasks.objects.filter(id=id)
+        form_class = forms.TaskForm_change_status
+        ctx = {'task': task,
+               'form_class': form_class}
+        return render(request, 'ftea/task.html', ctx)
+
+    def post(self, request, id):
+        #if request.POST.get('Word_eng')
+        print(request.POST.get('task_status'))
+        change_task_status = models.Tasks.objects.filter(id=id)
+        change_task_status(task_status=request.POST.get('task_status')).save()
+        print(change_task_status)
+        return HttpResponse("działa")
+
 class TaskCreate(CreateView):
     form_class = forms.TaskForm
     template_name = 'ftea/tasks_form.html'
@@ -149,3 +173,13 @@ class TaskCreate(CreateView):
     def form_valid(self, form):
         form.instance.project_user = self.request.user
         return super().form_valid(form)
+
+class OcrTest(View):
+    def get(self, request):
+        ctx = {}
+        print(os.getcwd())
+        img =Image.open('/Users/lukaszszlaszynski/Repos/ftea/ftea/static/ftea/img1/fak4.png')
+        text = pytesseract.image_to_string(img)
+        print(text)
+        return render(request, 'ftea/ocr.html', ctx)
+

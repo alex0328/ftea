@@ -1,0 +1,49 @@
+                           {% extends 'ftea/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+    		<div class="section-lg bg-image bg-image-gradient parallax" style="background-image: url({% static 'ftea/img1/back1.jpg)' %}">
+
+
+    		<!-- Testimonial section -->
+		<div class="section border-top">
+			<div class="container">
+				<div class="owl-carousel" data-owl-margin="30" data-owl-xs="1" data-owl-sm="1" data-owl-md="1" data-owl-lg="1" data-owl-xl="1" data-owl-nav="true">
+					<!-- Testimonial box 1 -->
+					<div class="border-radius bg-white border-all padding-30">
+						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
+							<div class="d-inline-block">
+								<h5 class="font-weight-normal line-height-140 margin-0">Task</h5>
+							</div>
+						</div>
+<ul>
+                            {% for t in task %}
+							<h2>{{ t.task_name}} </h2>
+<h1>{{ task.get_task_status_display }}</h1>
+                                  <li> <p>Opis: <br>{{ t.task_description }}</p></li>
+                                  <li> <p>Data utworzenia: <br>{{ t.created_at|date:'Y-m-d' }}</p></li>
+                                  <li>
+
+                                      <p>Status: <br>{{ t.task_status }}</p><br>
+                                      {% endfor %}
+          <form method="post">
+              {% csrf_token %}
+  {{ form_class }}
+              <br/>
+
+              <input type="submit" value="Change status">
+ </form>
+                                  <button>Delete</button></li>
+
+</ul>
+					</div>
+                </div>
+            </div>
+        </div>
+            </div>
+
+  {% endblock %}
+

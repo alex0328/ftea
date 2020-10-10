@@ -7,6 +7,106 @@
 		<div class="section-lg bg-image bg-image-gradient parallax" style="background-image: url({% static 'ftea/img1/back1.jpg)' %}">
 
 
+
+        <!-- Schedule section -->
+		<div id="schedule" class="section">
+			<div class="container">
+				<div class="row col-spacing-40">
+					<div class="col-12 col-lg-4">
+						<div class="card border-0 box-shadow-with-hover">
+							<div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
+								<div>
+									<h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>Projects</h5>
+								</div>
+								<div>Active</div>
+							</div>
+							<ul class="list-group list-group-flush">
+                            <a class="btn-dark" href="{% url 'ftea:add_project' %}">Add project</a>
+{#                            loop#}
+                                {% for project in projects %}
+								<li class="list-group-item padding-30">
+									<h6 class="heading-uppercase margin-0">Created at:<br> {{ project.created_at| date:'Y-m-d' }}</h6>
+
+                                    <a href="{% url 'ftea:project' project.id %}"> Name: {{ project.project_name }}</a>
+                                    <p>Status: {{ project.project_status }}</p>
+
+								</li>
+                                {% endfor %}
+
+							</ul>
+						</div>
+					</div>
+					<div class="col-12 col-lg-4">
+						<div class="card border-0 box-shadow-with-hover">
+							<div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
+								<div>
+									<h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>All Tasks</h5>
+								</div>
+								<div>{% now "jS F Y" %}</div>
+							</div>
+							<ul class="list-group list-group-flush">
+                            <a class="btn-dark" href="{% url 'ftea:add_task' %}">Add task</a>
+                                {% for task in this_week_tasks %}
+								<li class="list-group-item padding-30">
+                                    <a href="{% url 'ftea:task' task.id %}"><p>Name: {{ task.task_name }}</p>
+                                    <p>Description: {{ task.task_description | truncatechars:15 }}...</p>
+									<p>Deadline: {{ task.deadline | date:'Y-m-d' }}</p>
+                                    <p>Status: {{ task.task_status }}</p>
+                                    <p>Project: {{ task.task_project }}</p>
+                                        </a>
+								</li>
+                                {% endfor %}
+							</ul>
+						</div>
+					</div>
+                    <div class="col-12 col-lg-4">
+						<div class="card border-0 box-shadow-with-hover">
+							<div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
+								<div>
+									<h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>Payments</h5>
+								</div>
+								<div>July 28, 2019</div>
+							</div>
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item padding-30">
+									<h6 class="heading-uppercase margin-0">11:00 - 11:30</h6>
+									<p>Registration</p>
+								</li>
+								<li class="list-group-item padding-30">
+									<h6 class="heading-uppercase margin-0">11:30 - 12:30</h6>
+									<p>Mono Team @ FlaTheme</p>
+								</li>
+								<li class="list-group-item padding-30">
+									<h6 class="heading-uppercase margin-0">12:30 - 13:00</h6>
+									<p>Michelle, Senior Designer @ Agency</p>
+								</li>
+								<li class="list-group-item padding-30">
+									<h6 class="heading-uppercase margin-0">13:00 - 14:00</h6>
+									<p>Lunch Break</p>
+								</li>
+								<li class="list-group-item padding-30">
+									<h6 class="heading-uppercase margin-0">14:00 - 16:00</h6>
+									<p>Networking Sessions</p>
+								</li>
+								<li class="list-group-item padding-30">
+									<h6 class="heading-uppercase margin-0">16:00</h6>
+									<p>Closing Cerenomy</p>
+								</li>
+								<li class="list-group-item padding-30">
+									<h6 class="heading-uppercase margin-0">19:00</h6>
+									<p>After Party @ Corporate Hotel</p>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div><!-- end row -->
+			</div><!-- end container -->
+		</div>
+		<!-- end Schedule section -->
+
+
+
+
     		<!-- Testimonial section -->
 		<div class="section border-top">
 			<div class="container">
@@ -74,7 +174,7 @@
     {% else %}
     <tr style="background-color: #f2ffe6">
     {% endif %}
-        <td><a href="{% url 'ftea:project' task.id %}"> {{ task.task_name }}</a></td>
+        <td><a href="{% url 'ftea:task' task.id %}"> {{ task.task_name }}</a></td>
         <td class="project_status">{{ task.task_status }}</td>
         <td class="project_status">{{ task.task_project }}</td>
         <td class="project_status">{{ task.created_at| date:'Y-m-d' }}</td>
@@ -86,7 +186,45 @@
 
 
 					</div>
-					<!-- Testimonial box 3 -->
+                <!-- Testimonial box 3 -->
+					<div class="border-radius bg-white border-all padding-30">
+						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
+							<div class="d-inline-block">
+								<h5 class="font-weight-normal line-height-140 margin-0">All tasks with next 30 days deadline</h5>
+							</div>
+                        </div>
+
+                                                <table class="table">
+  <thead class="thead-dark">
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Status</th>
+      <th scope="col">Project</th>
+      <th scope="col">Created at</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for task in this_30_tasks %}
+{%  if task.task_prio == "high" %}
+    <tr style="background-color: #fff1f1">
+    {% elif task.task_prio == "low" %}
+    <tr style="background-color: #f1ffe5">
+    {% else %}
+    <tr style="background-color: #f2ffe6">
+    {% endif %}
+        <td><a href="{% url 'ftea:task' task.id %}"> {{ task.task_name }}</a></td>
+        <td class="project_status">{{ task.task_status }}</td>
+        <td class="project_status">{{ task.task_project }}</td>
+        <td class="project_status">{{ task.created_at| date:'Y-m-d' }}</td>
+    </tr>
+{% endfor %}
+  </tbody>
+  </table>
+                    <a class="btn-dark" href="{% url 'ftea:add_task' %}">Add task</a>
+
+
+					</div>
+					<!-- Testimonial box 4 -->
 					<div class="border-radius bg-white border-all padding-30">
 						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
 							<div class="d-inline-block">
@@ -117,7 +255,7 @@
   </table>
 
 					</div>
-					<!-- Testimonial box 4 -->
+					<!-- Testimonial box 5 -->
 					<div class="border-radius bg-white border-all padding-30">
 						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
 							<div class="d-inline-block">
@@ -140,66 +278,11 @@
 		<!-- end Testimonial section -->
             		</div>
 
-		<div class="section-lg padding-top-0">
-			<div class="container">
-				<div class="row icon-5xl text-center">
-					<div class="col-12 col-md-6 col-lg-4">
-						<div class="border-all border-radius padding-40 hover-shadow hover-float">
-							<i class="ti-camera text-dark"></i>
-							<h5 class="font-weight-normal margin-top-20">Photoshoot</h5>
-							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
-						</div>
-					</div>
-					<div class="col-12 col-md-6 col-lg-4">
-						<div class="border-all border-radius padding-40 hover-shadow hover-float">
-							<i class="ti-announcement text-dark"></i>
-							<h5 class="font-weight-normal margin-top-20">Social Marketing</h5>
-							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
-						</div>
-					</div>
-					<div class="col-12 col-md-6 col-lg-4">
-						<div class="border-all border-radius padding-40 hover-shadow hover-float">
-							<i class="ti-comment-alt text-dark"></i>
-							<h5 class="font-weight-normal margin-top-20">Consulting</h5>
-							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
-						</div>
-					</div>
-					<div class="col-12 col-md-6 col-lg-4">
-						<div class="border-all border-radius padding-40 hover-shadow hover-float">
-							<i class="ti-star text-dark"></i>
-							<h5 class="font-weight-normal margin-top-20">Branding</h5>
-							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
-						</div>
-					</div>
-					<div class="col-12 col-md-6 col-lg-4">
-						<div class="border-all border-radius padding-40 hover-shadow hover-float">
-							<i class="ti-world text-dark"></i>
-							<h5 class="font-weight-normal margin-top-20">Web Development</h5>
-							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
-						</div>
-					</div>
-					<div class="col-12 col-md-6 col-lg-4">
-						<div class="border-all border-radius padding-40 hover-shadow hover-float">
-							<i class="ti-ruler-pencil text-dark"></i>
-							<h5 class="font-weight-normal margin-top-20">Graphic Design</h5>
-							<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor.</p>
-							<a class="text-btn-2 margin-top-20" href="#">Learn More</a>
-						</div>
-					</div>
-				</div><!-- end row -->
-			</div><!-- end container -->
-		</div>
+
+
 
 
     <!-- Fakju -->
-
-
-
 		<div class="section">
 			<div class="container">
 				<div class="row">
