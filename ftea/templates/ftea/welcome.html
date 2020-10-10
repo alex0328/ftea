@@ -44,19 +44,7 @@
 								</div>
 								<div>{% now "jS F Y" %}</div>
 							</div>
-							<ul class="list-group list-group-flush">
-                            <a class="btn-dark" href="{% url 'ftea:add_task' %}">Add task</a>
-                                {% for task in this_week_tasks %}
-								<li class="list-group-item padding-30">
-                                    <a href="{% url 'ftea:task' task.id %}"><p>Name: {{ task.task_name }}</p>
-                                    <p>Description: {{ task.task_description | truncatechars:15 }}...</p>
-									<p>Deadline: {{ task.deadline | date:'Y-m-d' }}</p>
-                                    <p>Status: {{ task.task_status }}</p>
-                                    <p>Project: {{ task.task_project }}</p>
-                                        </a>
-								</li>
-                                {% endfor %}
-							</ul>
+
 						</div>
 					</div>
                     <div class="col-12 col-lg-4">
@@ -166,20 +154,7 @@
     </tr>
   </thead>
   <tbody>
-{% for task in this_week_tasks %}
-{%  if task.task_prio == "high" %}
-    <tr style="background-color: #fff1f1">
-    {% elif task.task_prio == "low" %}
-    <tr style="background-color: #f1ffe5">
-    {% else %}
-    <tr style="background-color: #f2ffe6">
-    {% endif %}
-        <td><a href="{% url 'ftea:task' task.id %}"> {{ task.task_name }}</a></td>
-        <td class="project_status">{{ task.task_status }}</td>
-        <td class="project_status">{{ task.task_project }}</td>
-        <td class="project_status">{{ task.created_at| date:'Y-m-d' }}</td>
-    </tr>
-{% endfor %}
+
   </tbody>
   </table>
                     <a class="btn-dark" href="{% url 'ftea:add_task' %}">Add task</a>
@@ -204,20 +179,7 @@
     </tr>
   </thead>
   <tbody>
-{% for task in this_30_tasks %}
-{%  if task.task_prio == "high" %}
-    <tr style="background-color: #fff1f1">
-    {% elif task.task_prio == "low" %}
-    <tr style="background-color: #f1ffe5">
-    {% else %}
-    <tr style="background-color: #f2ffe6">
-    {% endif %}
-        <td><a href="{% url 'ftea:task' task.id %}"> {{ task.task_name }}</a></td>
-        <td class="project_status">{{ task.task_status }}</td>
-        <td class="project_status">{{ task.task_project }}</td>
-        <td class="project_status">{{ task.created_at| date:'Y-m-d' }}</td>
-    </tr>
-{% endfor %}
+
   </tbody>
   </table>
                     <a class="btn-dark" href="{% url 'ftea:add_task' %}">Add task</a>
@@ -243,14 +205,7 @@
     </tr>
   </thead>
   <tbody>
-{% for prio_task in high_prio_tasks %}
-    <tr style="background-color: #fff1f1">
-        <td><a href="{% url 'ftea:project' prio_task.id %}"> {{ prio_task.task_name }}</a></td>
-        <td class="project_status">{{ prio_task.task_status }}</td>
-        <td class="project_status">{{ prio_task.task_project }}</td>
-        <td class="project_status">{{ prio_task.deadline| date:'Y-m-d' }}</td>
-    </tr>
-{% endfor %}
+
   </tbody>
   </table>
 

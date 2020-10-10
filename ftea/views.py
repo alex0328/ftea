@@ -117,10 +117,8 @@ class Welcome(LoginRequiredMixin, View):
         first_date = todays_date - timedelta(days=99999)
         print(next_seven_days)
         projects = models.Project.objects.filter(project_user=request.user)
-
         ctx = {
             "projects": projects,
-
         }
         return render(request, 'ftea/welcome.html', ctx)
 
