@@ -34,3 +34,14 @@ class TaskForm_change_status(forms.ModelForm):
     class Meta:
        model = models.Tasks
        fields = ('task_status',)
+
+class AddTask(forms.ModelForm):
+    class Meta:
+       model = models.Tasks
+       fields = ('task_name', 'task_description', 'task_notes', 'deadline', 'task_prio', 'task_project','task_status', 'task_type',)
+
+
+class ChangeTaskStatus(forms.ModelForm):
+    class Meta:
+        model = models.Tasks
+        fields = ('task_status', 'id',)

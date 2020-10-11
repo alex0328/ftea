@@ -2,6 +2,12 @@
 {% load static %}
 {% block content %}
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.min.js" integrity="sha512-Rct1iDIWXv4X96Tc4cZWNJfTn+tOQ0kIvRtHCR+fJ0K7PJrrvtv+OklWRAF/3bZDThiIxggq49vih71cQGqxkA==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.css" integrity="sha512-MtmAfbeyWXF6XsKufYi06Hmt2ZvhqFQyAAFpH5B0hcAP2Vy0P/OF7FYuCNWmHdmjuLWGkD4vSB7kat72kuOxfw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.js" integrity="sha512-DCkkPHF2HUSnHmiRy7Lv3iSxJrRyAX+B0j8D9JNcLjhxqWX4GaVzJYefk0gGlIR+Xut04ec8iBSZNn/yQJUE1Q==" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.min.css" integrity="sha512-BYWrT6aeSl1erWmmHT7YxzA49eVyoT9ky+F2BQ8flA9yj9I6WT1xF5rEhzJFeTShk8nurcA74zyTd63v+xqW8w==" crossorigin="anonymous" />
+
+
 
 
 		<div class="section-lg bg-image bg-image-gradient parallax" style="background-image: url({% static 'ftea/img1/back1.jpg)' %}">
@@ -12,6 +18,93 @@
 		<div id="schedule" class="section">
 			<div class="container">
 				<div class="row col-spacing-40">
+					<div class="col-12 col-lg-8">
+						<div class="card border-0 box-shadow-with-hover">
+							<div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
+								<div>
+									<h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>Projects</h5>
+								</div>
+								<div>Active</div>
+							</div>
+
+                        {#                        ------------------------- przeterminowane#}
+
+							<ul class="list-group list-group-flush">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                     Add task
+                            </button>
+                                <table class="table">
+                                  <thead class="thead-dark">
+                                    <tr>
+                                      <th scope="col">Name</th>
+                                      <th scope="col">Deadline</th>
+                                      <th scope="col">Project</th>
+                                      <th scope="col">Status</th>
+                                      <th scope="col">Change status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                     {% for expired_task in expired_tasks %}
+                                    <tr>
+                                        <th><a href="{% url 'ftea:task' expired_task.id %}" class="text-danger">{{ expired_task.task_name }}</a></th>
+                                        <td class="text-danger">{{ expired_task.deadline| date:'Y-m-d' }}</td>
+                                        <td>{{ expired_task.task_project }}</td>
+                                        <td>{{ expired_task.task_status }}</td>
+                                    <td><form method="post">
+                                        {% csrf_token %}
+                            {% for f in status_form %}
+                            {{ f }}
+                                <input type="hidden" value="{{ open_task.id }}" name="task_id">
+                        {% endfor %}
+
+
+                                        <button type="submit">Submit</button>
+</form></td>
+                                    </tr>
+                                    {% endfor %}
+                                     {#                        ------------------------- otwarte#}
+                                                                          {% for open_task in open_tasks %}
+                                    <tr>
+                                        <th><a href="{% url 'ftea:task' open_task.id %}">{{ open_task.task_name }}</a></th>
+                                        <td>{{ open_task.deadline| date:'Y-m-d' }}</td>
+                                        <td>{{ open_task.task_project }}</td>
+                                        <td>{{ open_task.task_status }}</td>
+                                        <td><form method="post">
+                                        {% csrf_token %}
+                            {% for f in status_form %}
+                            {{ f }}
+                                <input type="hidden" value="{{ open_task.id }}" name="task_id">
+                        {% endfor %}
+
+
+                                        <button type="submit">Submit</button>
+</form></td>
+
+
+
+                                    </tr>
+
+
+
+
+
+
+                                    {% endfor %}
+                                    </tr>
+                                  </tbody>
+                                </table>
+							</ul>
+
+
+
+
+
+
+
+
+						</div>
+					</div>
 					<div class="col-12 col-lg-4">
 						<div class="card border-0 box-shadow-with-hover">
 							<div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
@@ -22,29 +115,15 @@
 							</div>
 							<ul class="list-group list-group-flush">
                             <a class="btn-dark" href="{% url 'ftea:add_project' %}">Add project</a>
-{#                            loop#}
-                                {% for project in projects %}
-								<li class="list-group-item padding-30">
-									<h6 class="heading-uppercase margin-0">Created at:<br> {{ project.created_at| date:'Y-m-d' }}</h6>
+                                     {% for project in projects %}
 
-                                    <a href="{% url 'ftea:project' project.id %}"> Name: {{ project.project_name }}</a>
-                                    <p>Status: {{ project.project_status }}</p>
-
-								</li>
-                                {% endfor %}
-
+                                        <li class="list-group-item padding-30"><a href="{% url 'ftea:project' project.id %}">{{ project.project_name }}</a>
+                                        <p>{{ project.created_at| date:'Y-m-d' }}</p>
+                                        <p>{{ project.project_name }}</p>
+                                        <p>{{ project.project_status }}</p>
+                                        </li>
+                                    {% endfor %}
 							</ul>
-						</div>
-					</div>
-					<div class="col-12 col-lg-4">
-						<div class="card border-0 box-shadow-with-hover">
-							<div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
-								<div>
-									<h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>All Tasks</h5>
-								</div>
-								<div>{% now "jS F Y" %}</div>
-							</div>
-
 						</div>
 					</div>
                     <div class="col-12 col-lg-4">
@@ -404,6 +483,31 @@
 				</div><!-- end row -->
 			</div><!-- end container -->
 		</div>
+
+
+    <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+            <form action="" method="post" class="mx-auto add_project_form form-style-3">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" class="btn btn-primary" value="Save">
+    </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </html>
 

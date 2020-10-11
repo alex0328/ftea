@@ -21,6 +21,12 @@ TASK_PRIO = [
     ('high', 'high')
 ]
 
+TASK_TYPE = [
+    ('work', 'work'),
+    ('payment', 'payment'),
+    ('meeting', 'meeting')
+]
+
 class Translator(models.Model):
     translator_user = models.ForeignKey(User, on_delete=models.CASCADE)
     word_eng = models.CharField(max_length=200)
@@ -54,6 +60,7 @@ class Tasks(models.Model):
     task_prio = models.CharField(choices=TASK_PRIO, max_length=50, default=TASK_PRIO[1][1])
     task_project = models.ForeignKey(Project, on_delete=models.CASCADE, blank=True)
     task_status = models.CharField(choices=TASK_STATUS, max_length=50, default=TASK_STATUS[0][0])
+    task_type = models.CharField(choices=TASK_TYPE, max_length=50, default=TASK_STATUS[0][0])
 
     def __str__(self):
         return self.task_name

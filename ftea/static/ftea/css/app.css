@@ -11716,3 +11716,7 @@ div[class^='bg-black'] .border-all, div[class^='bg-black'] .border-y, div[class^
 .project_status {
   padding: 20px;
 }
+
+form textarea {
+  max-height: 40px;
+}

@@ -3,11 +3,11 @@ import json
 import django
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 from ftea.forms import TranslateForm
 from googletrans import Translator as GoogleTrans
 from ftea import models, forms
@@ -110,17 +110,49 @@ class Translator(View):
         return render(request, 'ftea/translator.html', ctx)
 
 class Welcome(LoginRequiredMixin, View):
+    add_task_form = forms.AddTask
+    status_form = forms.ChangeTaskStatus
+    template = 'ftea/welcome.html'
+
     def get(self, request):
-        todays_date = datetime.today()
+        todays_date = date.today()
         next_seven_days = todays_date + timedelta(days=7)
         next_30_days = todays_date + timedelta(days=30)
         first_date = todays_date - timedelta(days=99999)
-        print(next_seven_days)
+        yesterday = todays_date - timedelta(days=1)
+        #all projects
         projects = models.Project.objects.filter(project_user=request.user)
+        #expired tasks
+        expired_tasks = models.Tasks.objects.filter(deadline__range=(first_date, yesterday)).filter(
+            task_project__project_user=request.user).exclude(task_status='done').exclude(task_status='hold').order_by("deadline")
+        #open tasks
+        open_tasks = models.Tasks.objects.filter(deadline__range=(todays_date, next_seven_days)).filter(
+            task_project__project_user=request.user).exclude(task_status='done').exclude(task_status='hold').order_by("deadline")
         ctx = {
             "projects": projects,
+            "expired_tasks": expired_tasks,
+            "open_tasks": open_tasks,
+            "form": self.add_task_form,
+            "status_form": self.status_form
         }
-        return render(request, 'ftea/welcome.html', ctx)
+        return render(request, self.template, ctx)
+
+    def post(self, request):
+        add_task_form = self.add_task_form(request.POST)
+        status_form = self.status_form(request.POST)
+        if add_task_form.is_valid():
+            p = add_task_form.save()
+            return redirect("ftea:welcome")
+        if request.POST.get('task_id'):
+            task_id = request.POST.get('task_id')
+            new_task_status = request.POST.get('task_status')
+            task_to_update = models.Tasks.objects.get(id=task_id)
+            task_to_update.task_status = new_task_status
+            task_to_update.save()
+            return redirect("ftea:welcome")
+        return HttpResponse('co poszło nie tak')
+
+
 
 class Project_View(LoginRequiredMixin, View):
     def get(self, request, id):
