@@ -1,0 +1,110 @@
+{% extends 'ftea/base.html' %} {% load static %} {% block content %}
+
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.min.js"
+    integrity="sha512-Rct1iDIWXv4X96Tc4cZWNJfTn+tOQ0kIvRtHCR+fJ0K7PJrrvtv+OklWRAF/3bZDThiIxggq49vih71cQGqxkA=="
+    crossorigin="anonymous"
+></script>
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.css"
+    integrity="sha512-MtmAfbeyWXF6XsKufYi06Hmt2ZvhqFQyAAFpH5B0hcAP2Vy0P/OF7FYuCNWmHdmjuLWGkD4vSB7kat72kuOxfw=="
+    crossorigin="anonymous"
+/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.js" integrity="sha512-DCkkPHF2HUSnHmiRy7Lv3iSxJrRyAX+B0j8D9JNcLjhxqWX4GaVzJYefk0gGlIR+Xut04ec8iBSZNn/yQJUE1Q==" crossorigin="anonymous"></script>
+<link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.min.css"
+    integrity="sha512-BYWrT6aeSl1erWmmHT7YxzA49eVyoT9ky+F2BQ8flA9yj9I6WT1xF5rEhzJFeTShk8nurcA74zyTd63v+xqW8w=="
+    crossorigin="anonymous"
+/>
+
+<div class="section-lg bg-image bg-image-gradient parallax" style="background-image: url({% static 'ftea/img1/back1.jpg)' %}">
+    <!-- Schedule section -->
+    <div id="schedule" class="section">
+        <div class="container">
+            <div class="row col-spacing-40">
+                <div class="col-12 col-lg-12">
+                    <div class="card border-0 box-shadow-with-hover">
+                        <div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>Diarys</h5>
+                            </div>
+                            <div>Active</div>
+                        </div>
+
+                        {# ------------------------- przeterminowane#}
+
+                        <ul class="list-group list-group-flush">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                                Add diary
+                            </button>
+                            <table class="table">
+                                <thead class="thead-dark">
+                                    <tr>
+                                        <th scope="col">Name</th>
+                                        <th scope="col">Date</th>
+                                        <th scope="col">Note</th>
+                                        <th scope="col">Motto</th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for diary in diary_list %}
+                                    <tr>
+                                        <th><a href="{% url 'ftea:task' diary.id %}" class="text-danger">{{ diary.diary_name }}</a></th>
+                                        <td class="text-danger">{{ diary.created_at| date:'Y-m-d' }}</td>
+                                        <td>{{ diary.diary_description }}</td>
+                                        <td>{{ diary.diary_motto }}</td>
+                                        <td>
+                                            <form method="post">
+                                                {% csrf_token %} {% for f in status_form %} {{ f }}
+                                                <input type="hidden" value="{{ expired_task.id }}" name="task_id" />
+                                                {% endfor %}
+
+                                                <button type="submit">Submit</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container -->
+    </div>
+    <!-- end Schedule section -->
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form action="" method="post" class="mx-auto add_project_form form-style-3">
+                    {% csrf_token %} {{ form }}
+                    <input type="submit" class="btn btn-primary" value="Save" />
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

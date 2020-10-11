@@ -200,6 +200,40 @@ class TaskCreate(CreateView):
         form.instance.project_user = self.request.user
         return super().form_valid(form)
 
+#dziennik
+#wpis tworzenie
+class DiaryCreate(CreateView):
+    form_class = forms.DiaryForm
+    template_name = 'ftea/diary_form.html'
+    success_url = reverse_lazy("ftea:welcome")
+
+    def form_valid(self, form):
+        form.instance.diary_user = self.request.user
+        return super().form_valid(form)
+
+#lista wpisów
+class DiaryList(View):
+    add_diary_form = forms.AddDiary
+
+    def get(self, request):
+        diary_list = models.Diary.objects.filter(
+            diary_user=request.user)
+        ctx = {
+            "diary_list": diary_list,
+            "form": self.add_diary_form,
+        }
+        return render(request, 'ftea/diary.html', ctx)
+
+
+    def post(self, request):
+        new_diary = models.Diary(diary_name=request.POST['diary_name'],
+                                 diary_description=request.POST['diary_description'],
+                                 diary_motto=request.POST['diary_motto'],
+                                 diary_user=request.user)
+        new_diary.save()
+        return redirect("ftea:diary")
+
+
 class OcrTest(View):
     def get(self, request):
         ctx = {}

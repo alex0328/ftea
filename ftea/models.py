@@ -69,6 +69,7 @@ class Diary(models.Model):
     diary_user = models.ForeignKey(User, on_delete=models.CASCADE)
     diary_name = models.CharField(max_length=200)
     diary_description = models.TextField(blank=True)
+    diary_motto = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

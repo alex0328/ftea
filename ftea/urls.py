@@ -11,6 +11,8 @@ urlpatterns = [
     path('addproject/', views.ProjectCreate.as_view(), name='add_project'),
     path('task/<int:id>', views.Task_View.as_view(), name='task'),
     path('addtask/', views.TaskCreate.as_view(), name='add_task'),
+    path('adddiary/', views.DiaryCreate.as_view(), name='add_diary'),
+    path('diary/', views.DiaryList.as_view(), name='diary'),
     path('translator/', views.Translator.as_view(), name='translator'),
     path('ocr/', views.OcrTest.as_view(), name='ocr'),
     ]

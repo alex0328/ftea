@@ -30,6 +30,11 @@ class TaskForm(forms.ModelForm):
        super(TaskForm, self).__init__(*args, **kwargs)
        self.fields['task_project'].queryset = models.Project.objects.filter(project_user=user)
 
+class DiaryForm(forms.ModelForm):
+    class Meta:
+       model = models.Diary
+       fields = ('diary_name', 'diary_description', 'diary_motto',)
+
 class TaskForm_change_status(forms.ModelForm):
     class Meta:
        model = models.Tasks
@@ -39,6 +44,11 @@ class AddTask(forms.ModelForm):
     class Meta:
        model = models.Tasks
        fields = ('task_name', 'task_description', 'task_notes', 'deadline', 'task_prio', 'task_project','task_status', 'task_type',)
+
+class AddDiary(forms.ModelForm):
+    class Meta:
+       model = models.Diary
+       fields = ('diary_name', 'diary_description', 'diary_motto',)
 
 
 class ChangeTaskStatus(forms.ModelForm):
