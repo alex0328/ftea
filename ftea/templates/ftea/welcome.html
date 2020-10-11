@@ -55,7 +55,7 @@
                                         {% csrf_token %}
                             {% for f in status_form %}
                             {{ f }}
-                                <input type="hidden" value="{{ open_task.id }}" name="task_id">
+                                <input type="hidden" value="{{ expired_task.id }}" name="task_id">
                         {% endfor %}
 
 
