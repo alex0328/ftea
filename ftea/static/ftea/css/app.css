@@ -9642,10 +9642,6 @@ body.loaded:after {
   padding: 160px 0;
 }
 
-.section-lg.bg-image .container, .section-lg.bg-image .container-fluid {
-  padding: 160px 30px;
-}
-
 .section-xl {
   padding: 200px 0;
 }
@@ -11719,4 +11715,8 @@ div[class^='bg-black'] .border-all, div[class^='bg-black'] .border-y, div[class^
 
 form textarea {
   max-height: 40px;
+}
+
+.modal-backdrop {
+  position: relative;
 }

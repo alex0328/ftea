@@ -1,514 +1,187 @@
 {% extends 'ftea/base.html' %}
 {% load static %}
+{#{% load bootstrap4 %}       {# import bootstrap4/bootstrap3#}
+{#{% bootstrap_css %}         {# Embed Bootstrap CSS #}
+{#{% bootstrap_javascript jquery='full' %}  {# Embed Bootstrap JS+jQuery #}
+{#{{ form.media }}            {# Adds date-picker required JS and CSS #}
 {% block content %}
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.min.js" integrity="sha512-Rct1iDIWXv4X96Tc4cZWNJfTn+tOQ0kIvRtHCR+fJ0K7PJrrvtv+OklWRAF/3bZDThiIxggq49vih71cQGqxkA==" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.css" integrity="sha512-MtmAfbeyWXF6XsKufYi06Hmt2ZvhqFQyAAFpH5B0hcAP2Vy0P/OF7FYuCNWmHdmjuLWGkD4vSB7kat72kuOxfw==" crossorigin="anonymous" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.js" integrity="sha512-DCkkPHF2HUSnHmiRy7Lv3iSxJrRyAX+B0j8D9JNcLjhxqWX4GaVzJYefk0gGlIR+Xut04ec8iBSZNn/yQJUE1Q==" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar-scheduler/1.10.1/scheduler.min.css" integrity="sha512-BYWrT6aeSl1erWmmHT7YxzA49eVyoT9ky+F2BQ8flA9yj9I6WT1xF5rEhzJFeTShk8nurcA74zyTd63v+xqW8w==" crossorigin="anonymous" />
-
-
-
-
-		<div class="section-lg bg-image bg-image-gradient parallax" style="background-image: url({% static 'ftea/img1/back1.jpg)' %}">
-
-
-
-        <!-- Schedule section -->
-		<div id="schedule" class="section">
-			<div class="container">
-				<div class="row col-spacing-40">
-					<div class="col-12 col-lg-8">
-						<div class="card border-0 box-shadow-with-hover">
-							<div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
-								<div>
-									<h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>Projects</h5>
-								</div>
-								<div>Active</div>
-							</div>
-
-                        {#                        ------------------------- przeterminowane#}
-
-							<ul class="list-group list-group-flush">
-                            <!-- Button trigger modal -->
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-                                     Add task
-                            </button>
-                                <table class="table">
-                                  <thead class="thead-dark">
-                                    <tr>
-                                      <th scope="col">Name</th>
-                                      <th scope="col">Deadline</th>
-                                      <th scope="col">Project</th>
-                                      <th scope="col">Status</th>
-                                      <th scope="col">Change status</th>
-                                    </tr>
-                                  </thead>
-                                  <tbody>
-                                     {% for expired_task in expired_tasks %}
-                                    <tr>
-                                        <th><a href="{% url 'ftea:task' expired_task.id %}" class="text-danger">{{ expired_task.task_name }}</a></th>
-                                        <td class="text-danger">{{ expired_task.deadline| date:'Y-m-d' }}</td>
-                                        <td>{{ expired_task.task_project }}</td>
-                                        <td>{{ expired_task.task_status }}</td>
-                                    <td><form method="post">
-                                        {% csrf_token %}
-                            {% for f in status_form %}
-                            {{ f }}
-                                <input type="hidden" value="{{ expired_task.id }}" name="task_id">
-                        {% endfor %}
-
-
-                                        <button type="submit">Submit</button>
-</form></td>
-                                    </tr>
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+    <script src="{% static 'ftea/js/calendar.js' %}"></script>
+<div class="section-lg bg-image bg-image-gradient parallax" style="background-image: url({% static 'ftea/img1/back1.jpg)' %}">
+   <!-- Schedule section -->
+   <div id="schedule" class="section">
+      <div class="container">
+         <div class="row col-spacing-40">
+            <div class="col-12 col-lg-8">
+               <div class="card border-0 box-shadow-with-hover">
+                  <div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
+                     <div>
+                        <h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>Tasks</h5>
+                     </div>
+                     <div>Active</div>
+                  </div>
+                  {#                        ------------------------- przeterminowane#}
+                  <ul class="list-group list-group-flush">
+                     <!-- Button trigger modal -->
+                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                     Add task
+                     </button>
+                     <table class="table">
+                        <thead class="thead-dark">
+                           <tr>
+                              <th scope="col">Name</th>
+                              <th scope="col">Deadline</th>
+                              <th scope="col">Project</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Change status</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {% for expired_task in expired_tasks %}
+                           <tr>
+                              <th><a href="{% url 'ftea:task' expired_task.id %}" class="text-danger">{{ expired_task.task_name }}</a></th>
+                              <td class="text-danger">{{ expired_task.deadline| date:'Y-m-d' }}</td>
+                              <td>{{ expired_task.task_project }}</td>
+                              <td>{{ expired_task.task_status }}</td>
+                              <td>
+                                 <form method="post">
+                                    {% csrf_token %}
+                                    {% for f in status_form %}
+                                    {{ f }}
+                                    <input type="hidden" value="{{ expired_task.id }}" name="task_id">
                                     {% endfor %}
-                                     {#                        ------------------------- otwarte#}
-                                                                          {% for open_task in open_tasks %}
-                                    <tr>
-                                        <th><a href="{% url 'ftea:task' open_task.id %}">{{ open_task.task_name }}</a></th>
-                                        <td>{{ open_task.deadline| date:'Y-m-d' }}</td>
-                                        <td>{{ open_task.task_project }}</td>
-                                        <td>{{ open_task.task_status }}</td>
-                                        <td><form method="post">
-                                        {% csrf_token %}
-                            {% for f in status_form %}
-                            {{ f }}
-                                <input type="hidden" value="{{ open_task.id }}" name="task_id">
-                        {% endfor %}
-
-
-                                        <button type="submit">Submit</button>
-</form></td>
-
-
-
-                                    </tr>
-
-
-
-
-
-
+                                    <button type="submit">Submit</button>
+                                 </form>
+                              </td>
+                           </tr>
+                           {% endfor %}
+                           {#                        ------------------------- otwarte#}
+                           {% for open_task in open_tasks %}
+                           <tr>
+                              <th><a href="{% url 'ftea:task' open_task.id %}">{{ open_task.task_name }}</a></th>
+                              <td>{{ open_task.deadline| date:'Y-m-d' }}</td>
+                              <td>{{ open_task.task_project }}</td>
+                              <td>{{ open_task.task_status }}</td>
+                              <td>
+                                 <form method="post">
+                                    {% csrf_token %}
+                                    {% for f in status_form %}
+                                    {{ f }}
+                                    <input type="hidden" value="{{ open_task.id }}" name="task_id">
                                     {% endfor %}
-                                    </tr>
-                                  </tbody>
-                                </table>
-							</ul>
+                                    <button type="submit">Submit</button>
+                                 </form>
+                              </td>
+                           </tr>
+                           {% endfor %}
+                           </tr>
+                        </tbody>
+                     </table>
+                  </ul>
+               </div>
+            </div>
+            <div class="col-12 col-lg-4">
+               <div class="card border-0 box-shadow-with-hover">
+                  <div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
+                     <div>
+                        <h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>Projects</h5>
+                     </div>
+                     <div>Active</div>
+                  </div>
+                  <ul class="list-group list-group-flush">
+                     <a class="btn-dark" href="{% url 'ftea:add_project' %}">Add project</a>
+                     {% for project in projects %}
+                     <li class="list-group-item project_style padding-10">
+                        <a href="{% url 'ftea:project' project.id %}">{{ project.project_name }}</a>
+                        <p>{{ project.created_at| date:'Y-m-d' }}</p>
+                        <p>{{ project.project_name }}</p>
+                        <p>{{ project.project_status }}</p>
+                     </li>
+                     {% endfor %}
+                  </ul>
+               </div>
+            </div>
 
 
-
-
-
-
-
-
-						</div>
-					</div>
-					<div class="col-12 col-lg-4">
-						<div class="card border-0 box-shadow-with-hover">
-							<div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
-								<div>
-									<h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>Projects</h5>
-								</div>
-								<div>Active</div>
-							</div>
-							<ul class="list-group list-group-flush">
-                            <a class="btn-dark" href="{% url 'ftea:add_project' %}">Add project</a>
-                                     {% for project in projects %}
-
-                                        <li class="list-group-item padding-30"><a href="{% url 'ftea:project' project.id %}">{{ project.project_name }}</a>
-                                        <p>{{ project.created_at| date:'Y-m-d' }}</p>
-                                        <p>{{ project.project_name }}</p>
-                                        <p>{{ project.project_status }}</p>
-                                        </li>
+         <div class="col-12 col-lg-12">
+               <div class="card border-0 box-shadow-with-hover">
+                  <div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
+                     <div>
+                        <h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>Closed tasks last 20</h5>
+                     </div>
+                     <div>Active</div>
+                  </div>
+                  {#                        ------------------------- przeterminowane#}
+                  <ul class="list-group list-group-flush">
+                     <!-- Button trigger modal -->
+                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                     Add task
+                     </button>
+                     <table class="table">
+                        <thead class="thead-dark">
+                           <tr>
+                              <th scope="col">Name</th>
+                              <th scope="col">Deadline</th>
+                              <th scope="col">Project</th>
+                              <th scope="col">Status</th>
+                              <th scope="col">Change status</th>
+                           </tr>
+                        </thead>
+                        <tbody>
+                           {% for closed_task in closed_tasks_last_twenty_days %}
+                           <tr>
+                              <th><a href="{% url 'ftea:task' closed_task.id %}" class="text-danger">{{ closed_task.task_name }}</a></th>
+                              <td class="text-danger">{{ closed_task.deadline| date:'Y-m-d' }}</td>
+                              <td>{{ closed_task.task_project }}</td>
+                              <td>{{ closed_task.task_status }}</td>
+                              <td>
+                                 <form method="post">
+                                    {% csrf_token %}
+                                    {% for f in status_form %}
+                                    {{ f }}
+                                    <input type="hidden" value="{{ closed_task.id }}" name="task_id">
                                     {% endfor %}
-							</ul>
-						</div>
-					</div>
-                    <div class="col-12 col-lg-4">
-						<div class="card border-0 box-shadow-with-hover">
-							<div class="card-header bg-dark-lighter border-0 padding-30 d-flex justify-content-between align-items-center">
-								<div>
-									<h5 class="font-weight-normal margin-0"><i class="ti-calendar margin-right-10"></i>Payments</h5>
-								</div>
-								<div>July 28, 2019</div>
-							</div>
-							<ul class="list-group list-group-flush">
-								<li class="list-group-item padding-30">
-									<h6 class="heading-uppercase margin-0">11:00 - 11:30</h6>
-									<p>Registration</p>
-								</li>
-								<li class="list-group-item padding-30">
-									<h6 class="heading-uppercase margin-0">11:30 - 12:30</h6>
-									<p>Mono Team @ FlaTheme</p>
-								</li>
-								<li class="list-group-item padding-30">
-									<h6 class="heading-uppercase margin-0">12:30 - 13:00</h6>
-									<p>Michelle, Senior Designer @ Agency</p>
-								</li>
-								<li class="list-group-item padding-30">
-									<h6 class="heading-uppercase margin-0">13:00 - 14:00</h6>
-									<p>Lunch Break</p>
-								</li>
-								<li class="list-group-item padding-30">
-									<h6 class="heading-uppercase margin-0">14:00 - 16:00</h6>
-									<p>Networking Sessions</p>
-								</li>
-								<li class="list-group-item padding-30">
-									<h6 class="heading-uppercase margin-0">16:00</h6>
-									<p>Closing Cerenomy</p>
-								</li>
-								<li class="list-group-item padding-30">
-									<h6 class="heading-uppercase margin-0">19:00</h6>
-									<p>After Party @ Corporate Hotel</p>
-								</li>
-							</ul>
-						</div>
-					</div>
-				</div><!-- end row -->
-			</div><!-- end container -->
-		</div>
-		<!-- end Schedule section -->
-
-
-
-
-    		<!-- Testimonial section -->
-		<div class="section border-top">
-			<div class="container">
-				<div class="owl-carousel" data-owl-margin="30" data-owl-xs="1" data-owl-sm="1" data-owl-md="1" data-owl-lg="2" data-owl-xl="2" data-owl-nav="true">
-					<!-- Testimonial box 1 -->
-					<div class="border-radius bg-white border-all padding-30">
-						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
-							<div class="d-inline-block">
-								<h5 class="font-weight-normal line-height-140 margin-0">Projects</h5>
-							</div>
-						</div>
-                            <table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Project</th>
-      <th scope="col">Status</th>
-      <th scope="col">Created at</th>
-    </tr>
-  </thead>
-  <tbody>
-{% for project in projects %}
-    {%  if project.project_status == "new" %}
-    <tr style="background-color: #e0fcff">
-    {% elif project.project_status == "in progres" %}
-    <tr style="background-color: #dfffe2">
-    {% elif project.project_status == "done" %}
-    <tr style="background-color: rgba(0,0,0,0.63)">
-    {% elif project.project_status == "postponed" %}
-    <tr style="background-color: rgba(0,0,0,0.63)">
-    {% else %}
-    <tr style="background-color: #f2ffe6">
-    {% endif %}
-        <td><a href="{% url 'ftea:project' project.id %}"> {{ project.project_name }}</a></td>
-        <td class="project_status">{{ project.project_status }}</td>
-        <td class="project_status">{{ project.created_at| date:'Y-m-d' }}</td>
-    </tr>
-{% endfor %}
-  </tbody>
-  </table>
-                    <a class="btn-dark" href="{% url 'ftea:add_project' %}">Add project</a>
-					</div>
-					<!-- Testimonial box 2 -->
-					<div class="border-radius bg-white border-all padding-30">
-						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
-							<div class="d-inline-block">
-								<h5 class="font-weight-normal line-height-140 margin-0">All tasks with this week deadline</h5>
-							</div>
-                        </div>
-
-                                                <table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Status</th>
-      <th scope="col">Project</th>
-      <th scope="col">Created at</th>
-    </tr>
-  </thead>
-  <tbody>
-
-  </tbody>
-  </table>
-                    <a class="btn-dark" href="{% url 'ftea:add_task' %}">Add task</a>
-
-
-					</div>
-                <!-- Testimonial box 3 -->
-					<div class="border-radius bg-white border-all padding-30">
-						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
-							<div class="d-inline-block">
-								<h5 class="font-weight-normal line-height-140 margin-0">All tasks with next 30 days deadline</h5>
-							</div>
-                        </div>
-
-                                                <table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Status</th>
-      <th scope="col">Project</th>
-      <th scope="col">Created at</th>
-    </tr>
-  </thead>
-  <tbody>
-
-  </tbody>
-  </table>
-                    <a class="btn-dark" href="{% url 'ftea:add_task' %}">Add task</a>
-
-
-					</div>
-					<!-- Testimonial box 4 -->
-					<div class="border-radius bg-white border-all padding-30">
-						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
-							<div class="d-inline-block">
-								<h5 class="font-weight-normal line-height-140 margin-0">High prio tasks</h5>
-								<span class="font-small font-weight-normal">all periods</span>
-							</div>
-                        </div>
-
-                                                                    <table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Name</th>
-      <th scope="col">Status</th>
-      <th scope="col">Project</th>
-      <th scope="col">Deadline</th>
-    </tr>
-  </thead>
-  <tbody>
-
-  </tbody>
-  </table>
-
-					</div>
-					<!-- Testimonial box 5 -->
-					<div class="border-radius bg-white border-all padding-30">
-						<div class="d-flex align-items-center justify-content-between margin-bottom-20">
-							<div class="d-inline-block">
-								<h5 class="font-weight-normal line-height-140 margin-0">Rodney Scott</h5>
-								<span class="font-small font-weight-normal">Designer - Mono</span>
-							</div>
-							<div class="d-inline-block text-yellow">
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-								<i class="fas fa-star"></i>
-							</div>
-						</div>
-						<p>"Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."</p>
-					</div>
-				</div><!-- end owl-carousel -->
-			</div><!-- end container -->
-		</div>
-		<!-- end Testimonial section -->
-            		</div>
+                                    <button type="submit">Submit</button>
+                                 <input data-provide="datepicker">
+                                 </form>
+                              </td>
+                           </tr>
+                           {% endfor %}
+                        </tbody>
+                     </table>
+                  </ul>
+               </div>
+            </div>
 
 
 
 
 
-    <!-- Fakju -->
-		<div class="section">
-			<div class="container">
-				<div class="row">
-					<div class="col-12 col-sm-10 offset-sm-1">
-						<ul class="nav nav-pills margin-bottom-50 justify-content-center heading-uppercase">
-							<li class="nav-item">
-								<a class="nav-link active" data-toggle="tab" href="#first">First</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#second">Second</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#third">Third</a>
-							</li>
-                            							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#fourth">Fourth</a>
-							</li>
-                            							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#fivth">Fivth</a>
-							</li>
-                                                							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#sixth">Fivth</a>
-							</li>
-                                                							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="#seventh">Fivth</a>
-							</li>
-						</ul><!-- end nav-pills -->
-						<div class="tab-content">
-							<!-- Tab 1 -->
-							<div class="tab-pane fade show active" id="first">
-								<div>
-									<h6 class="font-weight-normal">Question One?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Two?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Three?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Four?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-							</div>
-							<!-- Tab 2 -->
-							<div class="tab-pane fade" id="second">
-								<div>
-									<h6 class="font-weight-normal">Question One?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Two?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Three?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Four?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-							</div>
-                            							<!-- Tab 3 -->
-							<div class="tab-pane fade" id="third">
-								<div>
-									<h6 class="font-weight-normal">Question One?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Two?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Three?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Four?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-							</div>
-                            							<!-- Tab 4 -->
-							<div class="tab-pane fade" id="fourth">
-								<div>
-									<h6 class="font-weight-normal">Question One?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Two?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Three?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Four?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-							</div>
-                            <!-- Tab 5 -->
-							<div class="tab-pane fade" id="fivth">
-								<div>
-									<h6 class="font-weight-normal">Question One?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Two?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Three?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Four?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-							</div>
-                            <!-- Tab 6 -->
-							<div class="tab-pane fade" id="sixth">
-								<div>
-									<h6 class="font-weight-normal">Question One?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Two?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Three?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Four?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-							</div>
-							<!-- Tab 7 -->
-							<div class="tab-pane fade" id="seventh">
-								<div>
-									<h6 class="font-weight-normal">Question One?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Two?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Three?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-								<div class="margin-top-30">
-									<h6 class="font-weight-normal">Question Four?</h6>
-									<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>
-								</div>
-							</div>
-						</div><!-- end tab-content -->
-					</div>
-				</div><!-- end row -->
-			</div><!-- end container -->
-		</div>
-
-
-    <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-            <form action="" method="post" class="mx-auto add_project_form form-style-3">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" class="btn btn-primary" value="Save">
-    </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
+   </div>
 </div>
-
-</html>
-
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+   <div class="modal-dialog" role="document">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+         </div>
+         <div class="modal-body">
+            <form action="" method="post" class="mx-auto add_project_form form-style-3">
+               {% csrf_token %}
+               {{ form }}
+               <input type="submit" class="btn btn-primary" value="Save">
+            </form>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-primary">Save changes</button>
+         </div>
+      </div>
+   </div>
+</div>
+   </div>
+</div>
 {% endblock %}

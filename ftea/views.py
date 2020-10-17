@@ -118,6 +118,7 @@ class Welcome(LoginRequiredMixin, View):
         todays_date = date.today()
         next_seven_days = todays_date + timedelta(days=7)
         next_30_days = todays_date + timedelta(days=30)
+        last_twenty_days = todays_date - timedelta(days=20)
         first_date = todays_date - timedelta(days=99999)
         yesterday = todays_date - timedelta(days=1)
         #all projects
@@ -128,12 +129,15 @@ class Welcome(LoginRequiredMixin, View):
         #open tasks
         open_tasks = models.Tasks.objects.filter(deadline__range=(todays_date, next_seven_days)).filter(
             task_project__project_user=request.user).exclude(task_status='done').exclude(task_status='hold').order_by("deadline")
+        closed_tasks_last_twenty_days = models.Tasks.objects.filter(deadline__range=(last_twenty_days, todays_date)).filter(
+            task_project__project_user=request.user).exclude(task_status='to do').exclude(task_status='in progres').order_by("deadline")
         ctx = {
             "projects": projects,
             "expired_tasks": expired_tasks,
             "open_tasks": open_tasks,
             "form": self.add_task_form,
-            "status_form": self.status_form
+            "status_form": self.status_form,
+            "closed_tasks_last_twenty_days": closed_tasks_last_twenty_days
         }
         return render(request, self.template, ctx)
 
@@ -212,7 +216,7 @@ class DiaryCreate(CreateView):
         return super().form_valid(form)
 
 #lista wpisów
-class DiaryList(View):
+class DiaryList(LoginRequiredMixin, View):
     add_diary_form = forms.AddDiary
 
     def get(self, request):

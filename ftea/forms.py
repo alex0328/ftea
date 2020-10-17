@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from ftea import models
+# from bootstrap_datepicker_plus import DatePickerInput
 
 
 class TranslateForm(forms.Form):
@@ -17,6 +18,10 @@ class TaskForm(forms.ModelForm):
     class Meta:
        model = models.Tasks
        fields = ('task_name','task_description', 'task_status', 'task_project', 'deadline', 'task_prio',)
+       # widgets = {
+       #     # 'deadline': DatePickerInput(),  # default date-format %m/%d/%Y will be used
+       #     'deadline': DatePickerInput(format='%Y-%m-%d'),  # specify date-frmat
+       # }
        deadline = forms.DateField(
            widget=forms.DateInput(
                attrs={
@@ -44,6 +49,10 @@ class AddTask(forms.ModelForm):
     class Meta:
        model = models.Tasks
        fields = ('task_name', 'task_description', 'task_notes', 'deadline', 'task_prio', 'task_project','task_status', 'task_type',)
+       # widgets = {
+       #     # 'deadline': DatePickerInput(),  # default date-format %m/%d/%Y will be used
+       #     'deadline': DatePickerInput(format='%Y-%m-%d'),  # specify date-frmat
+       # }
 
 class AddDiary(forms.ModelForm):
     class Meta:
