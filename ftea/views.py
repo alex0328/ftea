@@ -130,7 +130,7 @@ class Welcome(LoginRequiredMixin, View):
         open_tasks = models.Tasks.objects.filter(deadline__range=(todays_date, next_seven_days)).filter(
             task_project__project_user=request.user).exclude(task_status='done').exclude(task_status='hold').order_by("deadline")
         closed_tasks_last_twenty_days = models.Tasks.objects.filter(deadline__range=(last_twenty_days, todays_date)).filter(
-            task_project__project_user=request.user).exclude(task_status='to do').exclude(task_status='in progres').order_by("deadline")
+            task_project__project_user=request.user).exclude(task_status='to do').exclude(task_status='in progres').order_by("-updated_at")
         ctx = {
             "projects": projects,
             "expired_tasks": expired_tasks,
