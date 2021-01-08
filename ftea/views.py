@@ -123,13 +123,13 @@ class Welcome(LoginRequiredMixin, View):
         yesterday = todays_date - timedelta(days=1)
         #all projects
         projects = models.Project.objects.filter(project_user=request.user)
-        #expired tasks
-        expired_tasks = models.Tasks.objects.filter(deadline__range=(first_date, yesterday)).filter(
+        #expired Task
+        expired_tasks = models.Task.objects.filter(deadline__range=(first_date, yesterday)).filter(
             task_project__project_user=request.user).exclude(task_status='done').exclude(task_status='hold').order_by("deadline")
-        #open tasks
-        open_tasks = models.Tasks.objects.filter(deadline__range=(todays_date, next_seven_days)).filter(
+        #open Task
+        open_tasks = models.Task.objects.filter(deadline__range=(todays_date, next_seven_days)).filter(
             task_project__project_user=request.user).exclude(task_status='done').exclude(task_status='hold').order_by("deadline")
-        closed_tasks_last_twenty_days = models.Tasks.objects.filter(deadline__range=(last_twenty_days, todays_date)).filter(
+        closed_tasks_last_twenty_days = models.Task.objects.filter(deadline__range=(last_twenty_days, todays_date)).filter(
             task_project__project_user=request.user).exclude(task_status='to do').exclude(task_status='in progres').order_by("-updated_at")
         ctx = {
             "projects": projects,
@@ -150,7 +150,7 @@ class Welcome(LoginRequiredMixin, View):
         if request.POST.get('task_id'):
             task_id = request.POST.get('task_id')
             new_task_status = request.POST.get('task_status')
-            task_to_update = models.Tasks.objects.get(id=task_id)
+            task_to_update = models.Task.objects.get(id=task_id)
             task_to_update.task_status = new_task_status
             task_to_update.save()
             return redirect("ftea:welcome")
@@ -176,7 +176,7 @@ class ProjectCreate(LoginRequiredMixin, CreateView):
 
 class Task_View(LoginRequiredMixin, View):
     def get(self, request, id):
-        task = models.Tasks.objects.filter(id=id)
+        task = models.Task.objects.filter(id=id)
         form_class = forms.TaskForm_change_status
         ctx = {'task': task,
                'form_class': form_class}
@@ -185,7 +185,7 @@ class Task_View(LoginRequiredMixin, View):
     def post(self, request, id):
         #if request.POST.get('Word_eng')
         print(request.POST.get('task_status'))
-        change_task_status = models.Tasks.objects.filter(id=id)
+        change_task_status = models.Task.objects.filter(id=id)
         change_task_status(task_status=request.POST.get('task_status')).save()
         print(change_task_status)
         return HttpResponse("działa")

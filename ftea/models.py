@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -50,7 +52,7 @@ class Project(models.Model):
     def __str__(self):
         return self.project_name
 
-class Tasks(models.Model):
+class Task(models.Model):
     task_name = models.CharField(max_length=200)
     task_description = models.TextField(blank=True, null=True)
     task_notes = models.TextField(blank=True, null=True)
@@ -75,4 +77,42 @@ class Diary(models.Model):
 
     def __str__(self):
         return self.diary_name
+
+class Payment_category(models.Model):
+    payment_category_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    payment_category_name = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.payment_category_name
+
+class Payment_accounts(models.Model):
+    payment_accounts_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    payment_accounts_name = models.CharField(max_length=200)
+    payment_accounts_bank = models.CharField(max_length=200, default=None)
+    payment_accounts_number = models.CharField(max_length=200, default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+class Payment(models.Model):
+    payment_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    payment_name = models.CharField(max_length=200)
+    payment_description = models.TextField(blank=True)
+    payment_cat = models.ForeignKey(Payment_category, on_delete=models.CASCADE)
+    payment_account = models.ForeignKey(Payment_accounts, on_delete=models.CASCADE, default=None)
+    payment_amount = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.payment_name
+
+class Notes(models.Model):
+    note_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    note_subject = models.CharField(max_length=200)
+    note_description = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
 

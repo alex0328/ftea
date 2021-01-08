@@ -16,7 +16,7 @@ class ContactForm(forms.Form):
 
 class TaskForm(forms.ModelForm):
     class Meta:
-       model = models.Tasks
+       model = models.Task
        fields = ('task_name','task_description', 'task_status', 'task_project', 'deadline', 'task_prio',)
        # widgets = {
        #     # 'deadline': DatePickerInput(),  # default date-format %m/%d/%Y will be used
@@ -42,12 +42,12 @@ class DiaryForm(forms.ModelForm):
 
 class TaskForm_change_status(forms.ModelForm):
     class Meta:
-       model = models.Tasks
+       model = models.Task
        fields = ('task_status',)
 
 class AddTask(forms.ModelForm):
     class Meta:
-       model = models.Tasks
+       model = models.Task
        fields = ('task_name', 'task_description', 'task_notes', 'deadline', 'task_prio', 'task_project','task_status', 'task_type',)
        # widgets = {
        #     # 'deadline': DatePickerInput(),  # default date-format %m/%d/%Y will be used
@@ -62,5 +62,5 @@ class AddDiary(forms.ModelForm):
 
 class ChangeTaskStatus(forms.ModelForm):
     class Meta:
-        model = models.Tasks
+        model = models.Task
         fields = ('task_status', 'id',)
