@@ -116,31 +116,36 @@ class Welcome(LoginRequiredMixin, View):
     template = 'ftea/welcome.html'
 
     def get(self, request):
-        todays_date = date.today()
-        next_seven_days = todays_date + timedelta(days=7)
-        next_30_days = todays_date + timedelta(days=30)
-        last_twenty_days = todays_date - timedelta(days=20)
-        first_date = todays_date - timedelta(days=99999)
-        yesterday = todays_date - timedelta(days=1)
-        #all projects
-        projects = models.Project.objects.filter(project_user=request.user)
-        #expired Task
-        expired_tasks = models.Task.objects.filter(deadline__range=(first_date, yesterday)).filter(
-            task_project__project_user=request.user).exclude(task_status='done').exclude(task_status='hold').order_by("deadline")
-        #open Task
-        open_tasks = models.Task.objects.filter(deadline__range=(todays_date, next_seven_days)).filter(
-            task_project__project_user=request.user).exclude(task_status='done').exclude(task_status='hold').order_by("deadline")
-        closed_tasks_last_twenty_days = models.Task.objects.filter(deadline__range=(last_twenty_days, todays_date)).filter(
-            task_project__project_user=request.user).exclude(task_status='to do').exclude(task_status='in progres').order_by("-updated_at")
-        ctx = {
-            "projects": projects,
-            "expired_tasks": expired_tasks,
-            "open_tasks": open_tasks,
-            "form": self.add_task_form,
-            "status_form": self.status_form,
-            "closed_tasks_last_twenty_days": closed_tasks_last_twenty_days
-        }
-        return render(request, self.template, ctx)
+        if request.user.groups.filter(name__in=['FF']).exists():
+            return redirect("ftea:ff")
+        elif request.user.groups.filter(name__in=['TP']).exists():
+            return redirect("ftea:top-praca")
+        else:
+            todays_date = date.today()
+            next_seven_days = todays_date + timedelta(days=7)
+            next_30_days = todays_date + timedelta(days=30)
+            last_twenty_days = todays_date - timedelta(days=20)
+            first_date = todays_date - timedelta(days=99999)
+            yesterday = todays_date - timedelta(days=1)
+            #all projects
+            projects = models.Project.objects.filter(project_user=request.user)
+            #expired Task
+            expired_tasks = models.Task.objects.filter(deadline__range=(first_date, yesterday)).filter(
+                task_project__project_user=request.user).exclude(task_status='done').exclude(task_status='hold').order_by("deadline")
+            #open Task
+            open_tasks = models.Task.objects.filter(deadline__range=(todays_date, next_seven_days)).filter(
+                task_project__project_user=request.user).exclude(task_status='done').exclude(task_status='hold').order_by("deadline")
+            closed_tasks_last_twenty_days = models.Task.objects.filter(deadline__range=(last_twenty_days, todays_date)).filter(
+                task_project__project_user=request.user).exclude(task_status='to do').exclude(task_status='in progres').order_by("-updated_at")
+            ctx = {
+                "projects": projects,
+                "expired_tasks": expired_tasks,
+                "open_tasks": open_tasks,
+                "form": self.add_task_form,
+                "status_form": self.status_form,
+                "closed_tasks_last_twenty_days": closed_tasks_last_twenty_days
+            }
+            return render(request, self.template, ctx)
 
     def post(self, request):
         add_task_form = self.add_task_form(request.POST)

@@ -14,7 +14,7 @@
       <meta name="keywords" content="bootstrap, bootstrap admin template, admin theme, admin dashboard, dashboard template, admin template, responsive" />
       <meta name="author" content="codedthemes" />
       <!-- Favicon icon -->
-      <link rel="icon" href="{% static 'test_template/assets/images/favicon.ico' %}" type="image/x-icon">
+      <link rel="icon" href="{% static 'ftea/images/favicon.png' %}" type="image/x-icon">
     <!-- Google font-->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,500" rel="stylesheet">
     <!-- waves.css -->
@@ -211,7 +211,7 @@
                                       </a>
                                   </li>
                                   <li class="waves-effect waves-light">
-                                      <a href="auth-normal-sign-in.html">
+                                      <a href="{% url 'logout' %}">
                                           <i class="ti-layout-sidebar-left"></i> Logout
                                       </a>
                                   </li>
@@ -665,6 +665,7 @@
                                                         </div>
 {% endfor %}
                                                 </div>
+                                            </div>
                                             </div>
                                             <!--  project and team member end -->
 
