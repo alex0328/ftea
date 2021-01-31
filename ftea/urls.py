@@ -15,4 +15,6 @@ urlpatterns = [
     path('diary/', views.DiaryList.as_view(), name='diary'),
     path('translator/', views.Translator.as_view(), name='translator'),
     path('ocr/', views.OcrTest.as_view(), name='ocr'),
+    path('top-praca/', views.Top_Praca.as_view(), name='top-praca'),
+    path('ff/', views.FF.as_view(), name='ff'),
     ]

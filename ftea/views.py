@@ -16,6 +16,8 @@ from django.core.mail import send_mail, BadHeaderError
 import pytesseract
 from PIL import Image
 import os
+from jira import JIRA
+from ftea import jira_connect, jira_filters
 from django.contrib.auth.models import User
 import xlwt
 
@@ -58,13 +60,12 @@ class Translator(View):
                     lang_in = 'pl'
                     lang_out = 'en'
                 word = translator.translate(request.GET.get('word'), dest=lang_out, src=lang_in)
+                print('word')
                 ctx = {'word': word.text,
                        'lang': lang_out}
                 return HttpResponse(json.dumps(ctx))
             elif request.GET.get('request_type') == "delete_record":
-                print(request.GET)
                 id_to_delete = request.GET.get("id")
-                print(id_to_delete)
                 delete_word = models.Translator.objects.get(id=id_to_delete)
                 delete_word.delete()
                 ctx = {'status': 200}
@@ -247,3 +248,103 @@ class OcrTest(View):
         print(text)
         return render(request, 'ftea/ocr.html', ctx)
 
+class FF(LoginRequiredMixin, View):
+    def get(self, request):
+        connection_data = models.Jira_projects.objects.filter(jira_project_user=request.user)
+        connection_data_set = [connection_data[0].jira_project_server, connection_data[0].jira_project_login, connection_data[0].jira_project_api_key]
+        connector = jira_connect.Jira_connector(connection_data_set[0], connection_data_set[1], connection_data_set[2])
+        jira_connection = connector.connect()
+        i = jira_connection.search_issues('issuetype in (Bug, Story, Task, Sub-task) order by created DESC', maxResults=None)
+        ctx = {
+            'issues': i
+        }
+        return render(request, 'ftea/ff.html', ctx)
+
+class Top_Praca(View):
+    def get(self, request):
+        if request.user.groups.filter(name__in=['TP']).exists():
+            connector_obj = jira_connect.Jira_connector()
+            connect = connector_obj.connect(connector_obj.get_connection_data(request))
+            filter = connect.search_issues(jira_filters.kadlubowski["all_tasks_tasks"],
+                                              maxResults=None)
+            all_tasks = connect.search_issues('', maxResults=None)
+            all_done = connect.search_issues('issuetype in standardIssueTypes() AND status in (Done) order by created DESC',
+                                              maxResults=None)
+
+            projects = connect.projects()
+            ctx = {
+                'buttons': jira_filters.kadlubowski,
+                'project': projects[1],
+                'issues': filter,
+                'issues_count': len(filter),
+                'all_tasks_count': len(all_tasks),
+                'all_done': len(all_done),
+                'user': request.user
+            }
+            return render(request, 'ftea/top-praca.html', ctx)
+        else:
+            return HttpResponse('404')
+
+    def post(self, request):
+        filter_value = request.POST['filter']
+        connector_obj = jira_connect.Jira_connector()
+        connect = connector_obj.connect(connector_obj.get_connection_data(request))
+        filter = connect.search_issues(jira_filters.kadlubowski[filter_value],
+                                       maxResults=30)
+        all_tasks = connect.search_issues('', maxResults=None)
+        all_done = connect.search_issues('issuetype in standardIssueTypes() AND status in (Done) order by created DESC',
+                                         maxResults=None)
+        projects = connect.projects()
+        ctx = {
+            'buttons': jira_filters.kadlubowski,
+            'project': projects[1],
+            'issues': filter,
+            'issues_count': len(filter),
+            'all_tasks_count': len(all_tasks),
+            'all_done': len(all_done),
+            'user': request.user
+        }
+        return render(request, 'ftea/top-praca.html', ctx)
+
+class FF(View):
+    def get(self, request):
+        if request.user.groups.filter(name__in=['FF']).exists():
+            connector_obj = jira_connect.Jira_connector()
+            connect = connector_obj.connect(connector_obj.get_connection_data(request))
+            filter = connect.search_issues(jira_filters.ff["all_tasks_tasks"],
+                                              maxResults=30)
+            all_tasks = connect.search_issues('', maxResults=None)
+            all_done = jira_filters.ff['all_tasks_done']
+            projects = connect.projects()
+            ctx = {
+                'buttons': jira_filters.ff,
+                'project': projects[0],
+                'issues': filter,
+                'issues_count': len(filter),
+                'all_tasks_count': len(all_tasks),
+                'all_done': len(all_done),
+                'user': request.user
+            }
+            return render(request, 'ftea/ff.html', ctx)
+        else:
+            return HttpResponse('404')
+
+    def post(self, request):
+        filter_value = request.POST['filter']
+        connector_obj = jira_connect.Jira_connector()
+        connect = connector_obj.connect(connector_obj.get_connection_data(request))
+        filter = connect.search_issues(jira_filters.ff[filter_value],
+                                       maxResults=30)
+        all_tasks = connect.search_issues('', maxResults=None)
+        all_done = jira_filters.ff['all_tasks_done']
+        projects = connect.projects()
+        ctx = {
+            'buttons': jira_filters.ff,
+            'project': projects[0],
+            'issues': filter,
+            'issues_count': len(filter),
+            'all_tasks_count': len(all_tasks),
+            'all_done': len(all_done),
+            'user': request.user
+        }
+        return render(request, 'ftea/ff.html', ctx)

@@ -115,4 +115,8 @@ class Notes(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-
+class Jira_projects(models.Model):
+    jira_project_user = models.ForeignKey(User, on_delete=models.CASCADE)
+    jira_project_server = models.CharField(max_length=200)
+    jira_project_login = models.CharField(max_length=200)
+    jira_project_api_key = models.CharField(max_length=200)
