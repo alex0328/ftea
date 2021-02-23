@@ -19,8 +19,4 @@ def my_scheduled_job():
         except:
             send_mail('FF - cos grubo nie tak', 'smth goes wrong', 'lukasz.szlaszynski@4tea.pl', ['lukasz.szlaszynski@4tea.pl'])
     else:
-        ilosc_banerow = 'Ilosc banerow widocznych na stronie to: {}'.format(ilosc_banerow)
-        try:
-            send_mail('FF - jest git', ilosc_banerow, 'lukasz.szlaszynski@4tea.pl', ['lukasz.szlaszynski@4tea.pl'])
-        except:
-            send_mail('FF - jest git - error', 'smth goes wrong', 'lukasz.szlaszynski@4tea.pl', ['lukasz.szlaszynski@4tea.pl'])
+        pass
