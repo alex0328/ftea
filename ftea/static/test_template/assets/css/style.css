@@ -16500,3 +16500,15 @@ body.dark {
   background-color: #e6e6e6;
 }
 
+.taski_list li {
+  text-align: center;
+}
+
+.taski_list li img,
+.loader-active {
+  max-width: 26px;
+}
+
+.noactive {
+  display: none;
+}

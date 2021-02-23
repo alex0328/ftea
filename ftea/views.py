@@ -20,6 +20,8 @@ from jira import JIRA
 from ftea import jira_connect, jira_filters
 from django.contrib.auth.models import User
 import xlwt
+from bs4 import BeautifulSoup
+import requests
 
 
 # Create your views here.
@@ -30,7 +32,7 @@ class Index(View):
         else:
             form = forms.ContactForm
             ctx = {"form": form}
-        return render(request, 'ftea/index.html', ctx)
+        return render(request, 'ftea/index1.html', ctx)
 
     def post(self, request):
         form = forms.ContactForm(request.POST)
@@ -44,7 +46,7 @@ class Index(View):
             except BadHeaderError:
                 return HttpResponse('Invalid header found.')
             mess = "Mess sent"
-        return render(request, 'ftea/index.html')
+        return render(request, 'ftea/index1.html')
 
 class Translator(View):
     def get(self, request):
@@ -314,6 +316,24 @@ class Top_Praca(View):
 class FF(View):
     def get(self, request):
         if request.user.groups.filter(name__in=['FF']).exists():
+            if request.is_ajax():
+                connector_obj = jira_connect.Jira_connector()
+                connect = connector_obj.connect(connector_obj.get_connection_data(request))
+                filter = connect.search_issues(jira_filters.ff["all_tasks_tasks"],
+                                               maxResults=30)
+                all_tasks = connect.search_issues('', maxResults=None)
+                all_done = jira_filters.ff['all_tasks_done']
+                projects = connect.projects()
+                ctx = {
+                    'buttons': jira_filters.ff,
+                    'project': projects[0],
+                    'issues': filter,
+                    'issues_count': len(filter),
+                    'all_tasks_count': len(all_tasks),
+                    'all_done': len(all_done),
+                    'user': request.user
+                }
+                return HttpResponse(json.dumps(ctx))
             connector_obj = jira_connect.Jira_connector()
             connect = connector_obj.connect(connector_obj.get_connection_data(request))
             filter = connect.search_issues(jira_filters.ff["all_tasks_tasks"],
@@ -321,6 +341,38 @@ class FF(View):
             all_tasks = connect.search_issues('', maxResults=None)
             all_done = jira_filters.ff['all_tasks_done']
             projects = connect.projects()
+            buttons = {}
+            filters = {}
+            print("sssssssssss")
+            # print(json.dump(filter))
+            print("sssssssssss")
+            # for end, k in filter:
+            #     d2 = {str(end), str(k)}
+            #     filters.update(d2)
+            # print(filters)
+            filtr = {}
+            index = 1
+            for k in filter:
+                d2 = {str(index): k.raw}
+                index = index +1
+                filtr.update(d2)
+            for ind, j in jira_filters.ff.items():
+                d1 = {str(ind): str(j)}
+                buttons.update(d1)
+            print("lllllllllllllllllllllllll")
+            print(filtr)
+            print("lllllllllllllllllllllllll")
+            ctx1 = {
+                'filter': filtr,
+                'buttons': buttons,
+                'project': str(projects[0]),
+                'filter_count': str(len(filter)),
+                'all_task_count': str(len(all_tasks)),
+                'all_done': str(len(all_done)),
+                'user': str(request.user),
+                'buttons': str(jira_filters.ff)
+            }
+            # return HttpResponse(json.dumps(ctx1))
             ctx = {
                 'buttons': jira_filters.ff,
                 'project': projects[0],
@@ -328,8 +380,10 @@ class FF(View):
                 'issues_count': len(filter),
                 'all_tasks_count': len(all_tasks),
                 'all_done': len(all_done),
-                'user': request.user
+                'user': request.user,
+
             }
+            print(json.dumps(ctx1))
             return render(request, 'ftea/ff.html', ctx)
         else:
             return HttpResponse('404')
@@ -353,3 +407,78 @@ class FF(View):
             'user': request.user
         }
         return render(request, 'ftea/ff.html', ctx)
+
+class FF_ajax(View):
+    def get(self, request):
+        return render(request, 'ftea/ff-ajax.html')
+
+    def post(self, request):
+        if request.is_ajax:
+            connector_obj = jira_connect.Jira_connector()
+            connect = connector_obj.connect(connector_obj.get_connection_data(request))
+            filter = connect.search_issues(jira_filters.ff["all_tasks_tasks"],
+                                              maxResults=30)
+            all_tasks = connect.search_issues('', maxResults=None)
+            all_done = jira_filters.ff['all_tasks_done']
+            projects = connect.projects()
+            buttons = {}
+            filters = {}
+            print("sssssssssss")
+            # print(json.dump(filter))
+            print("sssssssssss")
+            # for end, k in filter:
+            #     d2 = {str(end), str(k)}
+            #     filters.update(d2)
+            # print(filters)
+            filtr = {}
+            index = 1
+            for k in filter:
+                d2 = {str(index): k.raw}
+                index = index +1
+                filtr.update(d2)
+            for ind, j in jira_filters.ff.items():
+                d1 = {str(ind): str(j)}
+                buttons.update(d1)
+            print("lllllllllllllllllllllllll")
+            print(filtr)
+            print("lllllllllllllllllllllllll")
+            ctx1 = {
+                'filter': filtr,
+                'buttons': buttons,
+                'project': str(projects[0]),
+                'filter_count': str(len(filter)),
+                'all_task_count': str(len(all_tasks)),
+                'all_done': str(len(all_done)),
+                'user': str(request.user),
+                'buttons': str(jira_filters.ff)
+            }
+            return HttpResponse(json.dumps(ctx1))
+
+class FF_banners(View):
+    def get(self, request):
+        url = 'https://fabrykaform.pl'
+        page = requests.get(url)
+        soup = BeautifulSoup(page.content, 'html.parser')
+        banery = soup.select('#homepage-banners>div')
+
+        print('______________________________')
+        ilosc_banerow = 1
+        for idx, i in enumerate(banery):
+            ilosc_banerow = idx + 1
+        if ilosc_banerow != 7:
+            ilosc_banerow = f'Ilosc banerow widocznych na stronie to: {ilosc_banerow}'
+            try:
+                send_mail('FF - cos grubo nie tak', ilosc_banerow, 'lukasz.szlaszynski@4tea.pl',
+                          ['lukasz.szlaszynski@4tea.pl'])
+            except:
+                send_mail('FF - cos grubo nie tak', 'smth goes wrong', 'lukasz.szlaszynski@4tea.pl',
+                          ['lukasz.szlaszynski@4tea.pl'])
+        else:
+            ilosc_banerow = f'Ilosc banerow widocznych na stronie to: {ilosc_banerow}'
+            try:
+                send_mail('FF - jest git', ilosc_banerow, 'lukasz.szlaszynski@4tea.pl', ['lukasz.szlaszynski@4tea.pl'])
+            except:
+                send_mail('FF - jest git - error', 'smth goes wrong', 'lukasz.szlaszynski@4tea.pl',
+                          ['lukasz.szlaszynski@4tea.pl'])
+        ctx = {'ilosc_banerow': ilosc_banerow}
+        return render(request, 'ftea/ff-banners.html', ctx)
