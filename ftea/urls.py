@@ -19,4 +19,5 @@ urlpatterns = [
     path('ff/', views.FF.as_view(), name='ff'),
     path('ff-ajax/', views.FF_ajax.as_view(), name='ff-ajax'),
     path('ff-banners/', views.FF_banners.as_view(), name='ff-banners'),
+    path('lotko/', views.Lotko.as_view(), name='lotko'),
     ]

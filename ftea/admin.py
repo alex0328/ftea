@@ -1,5 +1,5 @@
 from django.contrib import admin
-from ftea.models import Task, Diary, Project, Translator, Payment_category, Payment, Payment_accounts, Notes, Jira_projects
+from ftea.models import Task, Diary, Project, Translator, Payment_category, Payment, Payment_accounts, Notes, Jira_projects, LottoNumbers
 
 
 # Register your models here.
@@ -12,5 +12,6 @@ admin.site.register(Project)
 admin.site.register(Translator)
 admin.site.register(Notes)
 admin.site.register(Jira_projects)
+admin.site.register(LottoNumbers)
 
 
