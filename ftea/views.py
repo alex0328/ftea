@@ -490,20 +490,20 @@ class Lotko(View):
         wyniki = requests.get(url)
         na_strone = wyniki.json()
         numerki_to_sort = na_strone['numerki'].split(',')
-        numerki = sorted(numerki_to_sort)
+        numerki = sorted([int(i) for i in numerki_to_sort])
         data_losowania = na_strone['data_losowania']
         numer_losowania = na_strone['num_losowania']
         check_if_exist = models.LottoNumbers.objects.filter(draw_number=numer_losowania).exists()
         if not check_if_exist:
             lotko_to_db = models.LottoNumbers(draw_date=data_losowania,
-                                              draw_number=numer_losowania,
-                                              number_1=numerki[0],
-                                              number_2=numerki[1],
-                                              number_3=numerki[2],
-                                              number_4=numerki[3],
-                                              number_5=numerki[4],
-                                              number_6=numerki[5],
-                                              )
+                                       draw_number=numer_losowania,
+                                       number_1=numerki[0],
+                                       number_2=numerki[1],
+                                       number_3=numerki[2],
+                                       number_4=numerki[3],
+                                       number_5=numerki[4],
+                                       number_6=numerki[5],
+                                       )
             lotko_to_db.save()
             try:
                 wyniki_lotto = """
@@ -516,8 +516,6 @@ class Lotko(View):
             except:
                 send_mail('Lotko - cos grubo nie tak', 'smth goes wrong', 'lukasz.szlaszynski@4tea.pl',
                           ['lukasz.szlaszynski@4tea.pl'])
-        ctx = {'data_losowania': data_losowania,
-               'numer_losowania': numer_losowania,
-               'numerki': numerki
-               }
-        return render(request, 'ftea/lotko.html', ctx)
+        else:
+            wyniki_lotto = numerki
+        return HttpResponse(wyniki_lotto)
