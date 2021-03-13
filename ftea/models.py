@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -130,6 +130,8 @@ class LottoNumbers(models.Model):
     number_4 = models.CharField(max_length=2, default='0')
     number_5 = models.CharField(max_length=2, default='0')
     number_6 = models.CharField(max_length=2, default='0')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return "Data: {}, numery: {}, {}, {}, {}, {}, {}".format(self.draw_date, self.number_1, self.number_2, self.number_3, self.number_4, self.number_5, self.number_6)
